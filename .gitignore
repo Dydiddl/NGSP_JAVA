@@ -1,0 +1,43 @@
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### IntelliJ IDEA (추가) ###
+.idea/
+*.iml
+
+### Windows OS (추가) ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Project Data (추가) ###
+data/database/database.db
+data/input/person.csv
