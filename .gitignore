@@ -41,3 +41,6 @@ Desktop.ini
 ### Project Data (추가) ###
 data/database/database.db
 data/input/person.csv
+
+### Maven (추가) ###
+target/
