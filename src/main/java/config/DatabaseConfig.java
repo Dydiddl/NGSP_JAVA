@@ -1,6 +1,8 @@
 package config;
 
 public final class DatabaseConfig {
-    public static final String DB_URL =
-            "";
+    private DatabaseConfig() {}
+
+    public static final String JDBC_URL =
+            "jdbc:sqlite" + PathConfig.DATABASE_FILE;
 }

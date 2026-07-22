@@ -9,6 +9,7 @@ public class MenuInputReader {
     private final Scanner scanner;
 
     public MenuInputReader(Scanner scanner) {
+
         this.scanner = scanner;
     }
 
