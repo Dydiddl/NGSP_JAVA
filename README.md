@@ -1,5 +1,19 @@
 # NGSP_JAVA
 
+# 프로잭트 진행 중 메모 사항
+
+다음 commit 할 것 -> PersonNormalizer.java 작성
+
+1. PersonCreate 모델 확인
+2. PersonNormalizer 확인 또는 작성
+3. PersonValidator 작성
+4. PersonRepository 저장 메서드 작성
+5. PersonRegistrationService 작성
+6. PersonInputReader 작성
+7. PersonMenu 연결
+8. 직접 입력 통합 테스트
+9. CSV 등록으로 확장
+
 > **Namgang Landscape System (Java Edition)**  
 > 조경 업무를 관리하기 위한 터미널(CLI) 기반 ERP 시스템
 
