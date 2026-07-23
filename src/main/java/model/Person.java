@@ -31,19 +31,15 @@ public class Person {
     public long getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public int getGenderId() {
         return genderId;
     }
-
     public String getAddress() {
         return address;
     }
