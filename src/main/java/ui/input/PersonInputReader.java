@@ -1,44 +1,44 @@
 package ui.input;
 
-import model.PersonCreate;
-
 import java.util.Scanner;
 
-
 public class PersonInputReader {
-    public final Scanner scanner;
+
+    private final Scanner scanner;
 
     public PersonInputReader(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    public PersonCreate readPerson() {
-        System.out.println("이름: ");
-        String name = scanner.nextLine();
+    public String readName() {
+        System.out.print("이름: ");
+        return scanner.nextLine();
+    }
 
-        System.out.println("폰 번호: ");
-        String phone = scanner.nextLine();
+    public String readPhone() {
+        System.out.print("폰 번호: ");
+        return scanner.nextLine();
+    }
 
+    public int readGenderId() {
         System.out.println("1: 남자, 2: 여자");
-        System.out.println("성별 코드: ");
-        int genderId = Integer.parseInt(scanner.nextLine());
+        System.out.print("성별 코드: ");
 
-        System.out.println("주소: ");
-        String address = scanner.nextLine();
+        return Integer.parseInt(scanner.nextLine());
+    }
 
-        System.out.println("은행: ");
-        String bank = scanner.nextLine();
+    public String readAddress() {
+        System.out.print("주소: ");
+        return scanner.nextLine();
+    }
 
-        System.out.println("계좌번호: ");
-        String accountNumber = scanner.nextLine();
+    public String readBank() {
+        System.out.print("은행: ");
+        return scanner.nextLine();
+    }
 
-        return new PersonCreate(
-                name,
-                phone,
-                genderId,
-                address,
-                bank,
-                accountNumber
-        );
+    public String readAccountNumber() {
+        System.out.print("계좌번호: ");
+        return scanner.nextLine();
     }
 }

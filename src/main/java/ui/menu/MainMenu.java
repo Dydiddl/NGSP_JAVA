@@ -6,9 +6,13 @@ import ui.input.MenuInputReader;
 public class MainMenu {
 
     private final MenuInputReader menuInputReader;
+    private final PersonMenu personMenu;
 
-    public MainMenu(MenuInputReader menuInputReader) {
+    public MainMenu(
+            MenuInputReader menuInputReader,
+            PersonMenu personMenu) {
         this.menuInputReader = menuInputReader;
+        this.personMenu = personMenu;
     }
 
     public void run() {
@@ -20,7 +24,6 @@ public class MainMenu {
 
             switch (choice) {
                 case 1:
-                    PersonMenu personMenu = new PersonMenu(menuInputReader);
                     personMenu.run();
                     break;
                 case 2:

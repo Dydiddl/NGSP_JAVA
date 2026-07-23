@@ -13,11 +13,8 @@ public final class PersonSchema {
             """;
 
     public static final String INSERT_DEFAULT_GENDERS = """
-            INSERT OR IGNORE INTO gender (
-                id,
-                name
-            )
-            VALUES (
+            INSERT OR IGNORE INTO gender (id,name)
+            VALUES 
                     (1, '남자'),
                     (2, '여자')
             """;

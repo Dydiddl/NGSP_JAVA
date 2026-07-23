@@ -1,5 +1,6 @@
 package ui.menu;
 
+import model.PersonCreate;
 import service.PersonRegistrationService;
 import ui.input.MenuInputReader;
 import config.UiConfig;
@@ -29,8 +30,7 @@ public class PersonRegistrationMenu {
 
             switch (choice) {
                 case 1:
-                    System.out.println();
-                    System.out.println("사람 직접 등록 기능을 준비 중입니다.");
+                    registerPersonManually();
                     menuInputReader.waitForEnter();
                     break;
 
@@ -54,6 +54,44 @@ public class PersonRegistrationMenu {
         }
     }
 
+    private void registerPersonManually() {
+        try {
+            System.out.println();
+            System.out.println("사람 정보를 입력하세요.");
+
+            String name = personInputReader.readName();
+            String phone = personInputReader.readPhone();
+            int genderId = personInputReader.readGenderId();
+            String address = personInputReader.readAddress();
+            String bank = personInputReader.readBank();
+            String accountNumber = personInputReader.readAccountNumber();
+
+            long personId = personRegistrationService.register(
+                    name,
+                    phone,
+                    genderId,
+                    address,
+                    bank,
+                    accountNumber
+            );
+            System.out.println();
+            System.out.println("사람 등록이 완료되었습니다.");
+            System.out.println("등록된 사람 ID: " + personId);
+        } catch (NumberFormatException exception) {
+            System.out.println();
+            System.out.println("성별 코드는 숫자로 입력해 주세요.");
+        } catch (IllegalArgumentException exception) {
+            System.out.println();
+            System.out.println(exception.getMessage());
+
+        } catch (RuntimeException exception) {
+            System.out.println();
+            System.out.println("사람 등록 중 오류가 발생했습니다.");
+            System.out.println(exception.getMessage());
+        }
+    }
+
+
     private void printRegistrationMenu() {
         System.out.println();
         System.out.println(UiConfig.DIVIDER);
@@ -64,4 +102,5 @@ public class PersonRegistrationMenu {
         System.out.println("0. 사람 관리 메뉴로 돌아가기");
         System.out.println(UiConfig.DIVIDER);
     }
+
 }

@@ -7,14 +7,14 @@ import ui.input.MenuInputReader;
 public class PersonMenu {
 
     private final MenuInputReader menuInputReader;
-    private final PersonRegistrationService personRegistrationService;
+    private final PersonRegistrationMenu personRegistrationMenu;
 
     public PersonMenu(
             MenuInputReader menuInputReader,
-            PersonRegistrationService personRegistrationService
+            PersonRegistrationMenu personRegistrationMenu
     ) {
         this.menuInputReader = menuInputReader;
-        this.personRegistrationService = personRegistrationService;
+        this.personRegistrationMenu = personRegistrationMenu;
     }
 
     public void run() {
