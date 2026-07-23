@@ -4,9 +4,9 @@
 
 다음 commit 할 것 -> PersonNormalizer.java 작성
 
-1. PersonCreate 모델 확인
-2. PersonNormalizer 확인 또는 작성
-3. PersonValidator 작성
+1. PersonCreate 모델 확인 v
+2. PersonNormalizer 확인 또는 작성 v
+3. PersonValidator 작성 
 4. PersonRepository 저장 메서드 작성
 5. PersonRegistrationService 작성
 6. PersonInputReader 작성

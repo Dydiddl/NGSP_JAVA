@@ -12,19 +12,25 @@ public class PersonCreate {
     private final String phone;
     private final int genderId;
     private final String address;
+    private final String bank;
+    private final String accountNumber;
 
     // 생성자(constructor)
     public PersonCreate(
             String name,
             String phone,
             int genderId,
-            String address
+            String address,
+            String bank,
+            String accountNumber
     ) {
         // 왼쪽(객체가 가지고 있는 필드, this.name) = 오른쪽(생성자에 전달 된 값 ex) "홍길동")
         this.name = name;
         this.phone = phone;
         this.genderId = genderId;
         this.address = address;
+        this.bank = bank;
+        this.accountNumber = accountNumber;
     }
 
     // Getter -> 객체 안의 값을 읽기 위한 메서드
@@ -43,6 +49,8 @@ public class PersonCreate {
     public String getAddress() {
         return address;
     }
+    public String getBank() { return bank;}
+    public String getAccountNumber() { return accountNumber; }
 
     // model.PersonCreate@3f99bd52 같은 값을 출력하게 되는데,
     // 이것을 방지하여, 객체를 문자열로 바꾸는 방법을 정의한 것
@@ -53,6 +61,8 @@ public class PersonCreate {
                 ", phone='" + phone + '\'' +
                 ", genderId=" + genderId +
                 ", address='" + address + '\'' +
+                ", bank='" + bank + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
                 '}';
     }
 }
