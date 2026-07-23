@@ -8,6 +8,7 @@ public class PersonValidator {
     private PersonValidator() {
     }
 
+
     public static void validatePerson(
             String name,
             String phone,
@@ -42,7 +43,6 @@ public class PersonValidator {
 
     }
 
-
     public static void validatePhone(String phone){
 
         CommonValidator.requireText(phone, "휴대폰 번호");
@@ -62,7 +62,6 @@ public class PersonValidator {
         }
     }
 
-
     public static void validateGenderId(int genderId) {
         if (!PersonConfig.VALID_GENDER_IDS.contains(genderId)) {
             throw new IllegalArgumentException(
@@ -73,7 +72,6 @@ public class PersonValidator {
 
     public static void validateAddress(String address){
         CommonValidator.requireText(address, "주소");
-
         CommonValidator.validateLength(
                 address,
                 PersonConfig.ADDRESS_MIN_LENGTH,
@@ -92,7 +90,6 @@ public class PersonValidator {
         }
     }
 
-
     public static void validateAccountNumber(String accountNumber){
         CommonValidator.requireText(accountNumber, "계좌번호");
         CommonValidator.validateDigitsOnly(accountNumber, "계좌번호");
@@ -103,6 +100,5 @@ public class PersonValidator {
                 "계좌번호"
         );
     }
-
 
 }

@@ -1,14 +1,20 @@
 package ui.menu;
 
 import config.UiConfig;
+import service.PersonRegistrationService;
 import ui.input.MenuInputReader;
 
 public class PersonMenu {
 
     private final MenuInputReader menuInputReader;
+    private final PersonRegistrationService personRegistrationService;
 
-    public PersonMenu(MenuInputReader menuInputReader) {
+    public PersonMenu(
+            MenuInputReader menuInputReader,
+            PersonRegistrationService personRegistrationService
+    ) {
         this.menuInputReader = menuInputReader;
+        this.personRegistrationService = personRegistrationService;
     }
 
     public void run() {
@@ -20,7 +26,6 @@ public class PersonMenu {
 
             switch (choice) {
                 case 1:
-                    PersonRegistrationMenu personRegistrationMenu = new PersonRegistrationMenu(menuInputReader);
                     personRegistrationMenu.run();
                     break;
 

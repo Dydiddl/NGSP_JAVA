@@ -1,13 +1,23 @@
 package ui.menu;
 
+import service.PersonRegistrationService;
 import ui.input.MenuInputReader;
 import config.UiConfig;
+import ui.input.PersonInputReader;
 
 public class PersonRegistrationMenu {
     private final MenuInputReader menuInputReader;
+    private final PersonInputReader personInputReader;
+    private final PersonRegistrationService personRegistrationService;
 
-    public PersonRegistrationMenu(MenuInputReader menuInputReader) {
+    public PersonRegistrationMenu(
+            MenuInputReader menuInputReader,
+            PersonInputReader personInputReader,
+            PersonRegistrationService personRegistrationService
+    ) {
         this.menuInputReader = menuInputReader;
+        this.personInputReader = personInputReader;
+        this.personRegistrationService = personRegistrationService;
     }
 
     public void run() {
