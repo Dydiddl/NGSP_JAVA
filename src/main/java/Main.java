@@ -4,16 +4,16 @@ import database.DatabaseInitializer;
 
 import repository.PersonRepository;
 
-import service.PersonLookupService;
+import service.PersonSearchService;
 import service.PersonRegistrationService;
 
 import ui.input.MenuInputReader;
 import ui.input.PersonInputReader;
 
 import ui.menu.MainMenu;
-import ui.menu.PersonLookupMenu;
-import ui.menu.PersonMenu;
-import ui.menu.PersonRegistrationMenu;
+import ui.menu.person.PersonSearchMenu;
+import ui.menu.person.PersonMenu;
+import ui.menu.person.PersonRegistrationMenu;
 import ui.output.PersonOutput;
 
 
@@ -34,7 +34,7 @@ public class Main {
 
             // Service
             PersonRegistrationService personRegistrationService = new PersonRegistrationService(personRepository);
-            PersonLookupService personLookupService = new PersonLookupService(personRepository);
+            PersonSearchService personSearchService = new PersonSearchService(personRepository);
 
             // Output
             PersonOutput personOutput = new PersonOutput();
@@ -47,16 +47,16 @@ public class Main {
                             personRegistrationService
                     );
 
-            PersonLookupMenu personLookupMenu = new PersonLookupMenu(
+            PersonSearchMenu personSearchMenu = new PersonSearchMenu(
                     menuInputReader,
                     personInputReader,
-                    personLookupService,
+                    personSearchService,
                     personOutput
             );
             PersonMenu personMenu = new PersonMenu(
                     menuInputReader,
                     personRegistrationMenu,
-                    personLookupMenu
+                    personSearchMenu
             );
             MainMenu mainMenu = new MainMenu(
                     menuInputReader,

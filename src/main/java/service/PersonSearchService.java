@@ -5,11 +5,11 @@ import repository.PersonRepository;
 
 import java.util.List;
 
-public class PersonLookupService {
+public class PersonSearchService {
 
     private final PersonRepository personRepository;
 
-    public PersonLookupService(
+    public PersonSearchService(
             PersonRepository personRepository
     ) {
         this.personRepository = personRepository;

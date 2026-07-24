@@ -2,6 +2,7 @@ package ui.menu;
 
 import config.UiConfig;
 import ui.input.MenuInputReader;
+import ui.menu.person.PersonMenu;
 
 public class MainMenu {
 

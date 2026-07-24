@@ -1,6 +1,5 @@
-package ui.menu;
+package ui.menu.person;
 
-import model.PersonCreate;
 import service.PersonRegistrationService;
 import ui.input.MenuInputReader;
 import config.UiConfig;

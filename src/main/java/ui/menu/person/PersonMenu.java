@@ -1,23 +1,22 @@
-package ui.menu;
+package ui.menu.person;
 
 import config.UiConfig;
-import service.PersonRegistrationService;
 import ui.input.MenuInputReader;
 
 public class PersonMenu {
 
     private final MenuInputReader menuInputReader;
     private final PersonRegistrationMenu personRegistrationMenu;
-    private final PersonLookupMenu personLookupMenu;
+    private final PersonSearchMenu personSearchMenu;
 
     public PersonMenu(
             MenuInputReader menuInputReader,
             PersonRegistrationMenu personRegistrationMenu,
-            PersonLookupMenu personLookupMenu
+            PersonSearchMenu personSearchMenu
     ) {
         this.menuInputReader = menuInputReader;
         this.personRegistrationMenu = personRegistrationMenu;
-        this.personLookupMenu = personLookupMenu;
+        this.personSearchMenu = personSearchMenu;
     }
 
     public void run() {
@@ -33,7 +32,7 @@ public class PersonMenu {
                     break;
 
                 case 2:
-                    personLookupMenu.run();
+                    personSearchMenu.run();
                     break;
 
                 case 3:

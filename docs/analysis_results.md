@@ -102,10 +102,10 @@ sequenceDiagram
 
 ```mermaid
 graph TD
-    User([사용자]) --> UI[ui.menu.PersonMenu]
+    User([사용자]) --> UI[ui.menu.person.PersonMenu]
     
     subgraph UI Layer
-        UI -->|1. 등록 선택| RegMenu[ui.menu.PersonRegistrationMenu]
+        UI -->|1. 등록 선택| RegMenu[ui.menu.person.PersonRegistrationMenu]
         UI -->|2. 조회 선택| SelectProc[조회 로직]
     end
 

@@ -1,10 +1,10 @@
-package ui.menu;
+package ui.menu.person;
 
 import config.UiConfig;
 
 import model.Person;
 
-import service.PersonLookupService;
+import service.PersonSearchService;
 
 import ui.input.MenuInputReader;
 import ui.input.PersonInputReader;
@@ -12,25 +12,25 @@ import ui.output.PersonOutput;
 
 import java.util.List;
 
-public class PersonLookupMenu {
+public class PersonSearchMenu {
     // 옵션
     // 1. 이름으로 검색
     // 2. 성별로 검색
     // 검색을 하게 되면, 이름, 성별, 전화번호, 주소, 은행, 계좌번호 가 출력
     private final MenuInputReader menuInputReader;
     private final PersonInputReader personInputReader;
-    private final PersonLookupService personLookupService;
+    private final PersonSearchService personSearchService;
     private final PersonOutput personOutput;
 
-    public PersonLookupMenu(
+    public PersonSearchMenu(
             MenuInputReader menuInputReader,
             PersonInputReader personInputReader,
-            PersonLookupService personLookupService,
+            PersonSearchService personSearchService,
             PersonOutput personOutput
     ) {
         this.menuInputReader = menuInputReader;
         this.personInputReader = personInputReader;
-        this.personLookupService = personLookupService;
+        this.personSearchService = personSearchService;
         this.personOutput = personOutput;
     }
 
@@ -69,7 +69,7 @@ public class PersonLookupMenu {
 
             String name = personInputReader.readName();
 
-            List<Person> persons = personLookupService.findByName(name);
+            List<Person> persons = personSearchService.findByName(name);
 
             personOutput.printPersons(persons);
         } catch (IllegalArgumentException exception) {
@@ -88,7 +88,7 @@ public class PersonLookupMenu {
             System.out.println();
 
             int genderId = personInputReader.readGenderId();
-            List<Person> persons = personLookupService.findByGenderId(genderId);
+            List<Person> persons = personSearchService.findByGenderId(genderId);
 
             personOutput.printPersons(persons);
         } catch (IllegalArgumentException exception) {
