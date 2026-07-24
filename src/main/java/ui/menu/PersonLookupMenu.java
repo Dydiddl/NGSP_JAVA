@@ -2,13 +2,13 @@ package ui.menu;
 
 import config.UiConfig;
 
-import formatter.PersonFormatter;
 import model.Person;
 
 import service.PersonLookupService;
 
 import ui.input.MenuInputReader;
 import ui.input.PersonInputReader;
+import ui.output.PersonOutput;
 
 import java.util.List;
 
@@ -20,15 +20,18 @@ public class PersonLookupMenu {
     private final MenuInputReader menuInputReader;
     private final PersonInputReader personInputReader;
     private final PersonLookupService personLookupService;
+    private final PersonOutput personOutput;
 
     public PersonLookupMenu(
             MenuInputReader menuInputReader,
             PersonInputReader personInputReader,
-            PersonLookupService personLookupService
+            PersonLookupService personLookupService,
+            PersonOutput personOutput
     ) {
         this.menuInputReader = menuInputReader;
         this.personInputReader = personInputReader;
         this.personLookupService = personLookupService;
+        this.personOutput = personOutput;
     }
 
     public void run() {
@@ -68,7 +71,7 @@ public class PersonLookupMenu {
 
             List<Person> persons = personLookupService.findByName(name);
 
-            printPersons(persons);
+            personOutput.printPersons(persons);
         } catch (IllegalArgumentException exception) {
             System.out.println();
             System.out.println(exception.getMessage());
@@ -87,7 +90,7 @@ public class PersonLookupMenu {
             int genderId = personInputReader.readGenderId();
             List<Person> persons = personLookupService.findByGenderId(genderId);
 
-            printPersons(persons);
+            personOutput.printPersons(persons);
         } catch (IllegalArgumentException exception) {
             System.out.println();
             System.out.println(exception.getMessage());
@@ -99,28 +102,6 @@ public class PersonLookupMenu {
         menuInputReader.waitForEnter();
     }
 
-    private void printPersons(List<Person> persons) {
-        System.out.println();
-        if(persons.isEmpty()) {
-            System.out.println("검색 결과가 없습니다.");
-            return;
-        }
-
-        System.out.println(UiConfig.DIVIDER);
-        System.out.println("검색 결과");
-        System.out.println(UiConfig.DIVIDER);
-
-        for (Person person : persons) {
-            System.out.println("ID: " + person.getId());
-            System.out.println("이름: " + person.getName());
-            System.out.println("성별: " + PersonFormatter.formatGender(person.getGenderId()));
-            System.out.println("전화번호: " + PersonFormatter.formatPhone(person.getPhone()));
-            System.out.println("주소: " + person.getAddress());
-            System.out.println("은행: " + person.getBank());
-            System.out.println("계좌번호: " + person.getAccountNumber());
-            System.out.println(UiConfig.DIVIDER);
-        }
-    }
 
     private void printLookupMenu() {
         System.out.println();
