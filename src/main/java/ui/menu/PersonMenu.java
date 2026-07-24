@@ -8,13 +8,16 @@ public class PersonMenu {
 
     private final MenuInputReader menuInputReader;
     private final PersonRegistrationMenu personRegistrationMenu;
+    private final PersonLookupMenu personLookupMenu;
 
     public PersonMenu(
             MenuInputReader menuInputReader,
-            PersonRegistrationMenu personRegistrationMenu
+            PersonRegistrationMenu personRegistrationMenu,
+            PersonLookupMenu personLookupMenu
     ) {
         this.menuInputReader = menuInputReader;
         this.personRegistrationMenu = personRegistrationMenu;
+        this.personLookupMenu = personLookupMenu;
     }
 
     public void run() {
@@ -30,9 +33,7 @@ public class PersonMenu {
                     break;
 
                 case 2:
-                    System.out.println();
-                    System.out.println("사람 조회 기능을 준비 중입니다.");
-                    menuInputReader.waitForEnter();
+                    personLookupMenu.run();
                     break;
 
                 case 3:

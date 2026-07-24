@@ -2,6 +2,9 @@
 
 # 프로잭트 진행 중 메모 사항
 
+# Readme.md 맨 아래 # 파일 확인할것
+
+
 다음 commit 할 것 -> PersonValidator.java 작성
 
 1. PersonCreate 모델 확인 v
@@ -280,5 +283,227 @@ CSV 등록
 
 라는 원칙으로 개발하고 있습니다.
 
-기능 구현보다 구조를 먼저 완성하여,
+
+
+# 기능 구현보다 구조를 먼저 완성하여,
 장기간 유지보수 가능한 ERP 시스템을 목표로 합니다.
+
+사람 조회 기능도 등록 기능과 같은 계층으로 추가하면 됩니다.
+
+```text
+PersonMenu
+→ PersonLookupMenu
+→ PersonLookupService
+→ PersonRepository
+→ SQLite
+```
+
+현재 `PersonMenu`의 `case 2`가 조회 기능의 입구입니다.
+
+```java
+case 2:
+    personLookupMenu.run();
+    break;
+```
+
+필요한 클래스는 우선 세 가지입니다.
+
+### 1. `ui.menu.PersonLookupMenu`
+
+조회 메뉴와 출력 담당입니다.
+
+```java
+package ui.menu;
+
+import model.Person;
+import service.PersonLookupService;
+import ui.input.MenuInputReader;
+
+import java.util.List;
+
+public class PersonLookupMenu {
+
+    private final MenuInputReader menuInputReader;
+    private final PersonLookupService personLookupService;
+
+    public PersonLookupMenu(
+            MenuInputReader menuInputReader,
+            PersonLookupService personLookupService
+    ) {
+        this.menuInputReader = menuInputReader;
+        this.personLookupService = personLookupService;
+    }
+
+    public void run() {
+        List<Person> people = personLookupService.findAll();
+
+        System.out.println();
+
+        if (people.isEmpty()) {
+            System.out.println("등록된 사람이 없습니다.");
+            menuInputReader.waitForEnter();
+            return;
+        }
+
+        for (Person person : people) {
+            System.out.println(person);
+        }
+
+        menuInputReader.waitForEnter();
+    }
+}
+```
+
+### 2. `service.PersonLookupService`
+
+조회 업무를 담당합니다.
+
+```java
+package service;
+
+import model.Person;
+import repository.PersonRepository;
+
+import java.util.List;
+
+public class PersonLookupService {
+
+    private final PersonRepository personRepository;
+
+    public PersonLookupService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
+
+    public List<Person> findAll() {
+        return personRepository.findAll();
+    }
+}
+```
+
+### 3. `PersonRepository`에 `findAll()` 추가
+
+```java
+public List<Person> findAll() {
+    String sql = """
+            SELECT
+                id,
+                name,
+                phone,
+                genderId,
+                address,
+                bank,
+                accountNumber
+            FROM person
+            ORDER BY id
+            """;
+
+    List<Person> people = new ArrayList<>();
+
+    try (
+            Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery()
+    ) {
+        while (resultSet.next()) {
+            Person person = new Person(
+                    resultSet.getLong("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("phone"),
+                    resultSet.getInt("genderId"),
+                    resultSet.getString("address"),
+                    resultSet.getString("bank"),
+                    resultSet.getString("accountNumber")
+            );
+
+            people.add(person);
+        }
+
+        return people;
+
+    } catch (SQLException exception) {
+        throw new RuntimeException(
+                "사람 목록 조회에 실패했습니다.",
+                exception
+        );
+    }
+}
+```
+
+필요한 import:
+
+```java
+import database.DatabaseConnection;
+import model.Person;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+```
+
+그다음 `PersonMenu`는 `PersonLookupMenu`를 필드로 받아야 합니다.
+
+```java
+private final PersonLookupMenu personLookupMenu;
+```
+
+생성자에도 추가합니다.
+
+```java
+public PersonMenu(
+        MenuInputReader menuInputReader,
+        PersonRegistrationMenu personRegistrationMenu,
+        PersonLookupMenu personLookupMenu
+) {
+    this.menuInputReader = menuInputReader;
+    this.personRegistrationMenu = personRegistrationMenu;
+    this.personLookupMenu = personLookupMenu;
+}
+```
+
+그리고 `case 2`를 바꿉니다.
+
+```java
+case 2:
+    personLookupMenu.run();
+    break;
+```
+
+마지막으로 `Main`에서 객체를 조립합니다.
+
+```java
+PersonLookupService personLookupService =
+        new PersonLookupService(personRepository);
+
+PersonLookupMenu personLookupMenu =
+        new PersonLookupMenu(
+                menuInputReader,
+                personLookupService
+        );
+
+PersonMenu personMenu =
+        new PersonMenu(
+                menuInputReader,
+                personRegistrationMenu,
+                personLookupMenu
+        );
+```
+
+중요한 점은 `PersonRepository`를 새로 만들지 않고, 등록과 조회가 같은 객체를 사용하게 하는 것입니다.
+
+```java
+PersonRepository personRepository =
+        new PersonRepository();
+```
+
+이 하나를 등록 서비스와 조회 서비스가 함께 사용합니다.
+
+```text
+PersonRegistrationService ─┐
+                           ├→ PersonRepository
+PersonLookupService ───────┘
+```
+
+다만 `Person` 클래스 생성자 필드 순서는 현재 작성한 실제 `Person` 모델과 맞춰야 합니다. 먼저 가장 단순한 `전체 목록 조회`부터 완성하는 것이 좋습니다.
