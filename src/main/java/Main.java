@@ -47,7 +47,8 @@ public class Main {
                     new PersonRegistrationMenu(
                             menuInputReader,
                             personInputReader,
-                            personRegistrationService
+                            personRegistrationService,
+                            personOutput
                     );
             PersonSearchMenu personSearchMenu = new PersonSearchMenu(
                     menuInputReader,

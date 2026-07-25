@@ -1,8 +1,11 @@
 package ui.output;
 
 import config.UiConfig;
-import formatter.PersonFormatter;
+
 import model.Person;
+import model.PersonCreate;
+
+import formatter.PersonFormatter;
 
 import java.util.List;
 
@@ -62,6 +65,17 @@ public class PersonOutput {
 
     }
 
+    public void printPersonCreate(PersonCreate person){
+        UiOutput.printHeader("등록 결과");
+        System.out.println("이름: " + person.getName());
+        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.getPhone()));
+        System.out.println("성별:  " + PersonFormatter.formatGender(person.getGenderId()));
+        System.out.println("주소: " + person.getAddress());
+        System.out.println("은행: " + person.getBank());
+        System.out.println("계좌번호: " + person.getAccountNumber());
+        UiOutput.printDivider();
+    }
+
 
     private void printPerson(Person person) {
         System.out.println("ID: " + person.getId());
@@ -73,5 +87,7 @@ public class PersonOutput {
         System.out.println("계좌번호: " + person.getAccountNumber());
         UiOutput.printDivider();
     }
+
+
 
 }

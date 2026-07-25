@@ -1,5 +1,8 @@
 package ui.input;
 
+import normalizer.PersonNormalizer;
+import validator.PersonValidator;
+
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -11,41 +14,119 @@ public class PersonInputReader {
         this.scanner = scanner;
     }
 
-    public int readPersonId(){
-        System.out.println("Person ID:");
-        return Integer.parseInt(scanner.nextLine().trim());
+    public int readPersonId() {
+        while (true) {
+            System.out.print("Person ID: ");
+
+            String input = scanner.nextLine().trim();
+
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException exception) {
+                System.out.println("숫자만 입력해 주세요.");
+            }
+        }
     }
 
     public String readName() {
-        System.out.print("이름: ");
-        return scanner.nextLine();
+        while (true) {
+            System.out.print("이름: ");
+            String input = scanner.nextLine().trim();
+            try {
+                String normalizedName = PersonNormalizer.normalizeName(input);
+
+                PersonValidator.validateName(normalizedName);
+
+                return input;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
     }
 
     public String readPhone() {
-        System.out.print("폰 번호: ");
-        return scanner.nextLine();
+        while (true) {
+            System.out.print("전화번호: ");
+            String input = scanner.nextLine().trim();
+            try {
+                String normalizedPhone = PersonNormalizer.normalizePhone(input);
+
+                PersonValidator.validatePhone(normalizedPhone);
+
+                return input;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
     }
 
     public int readGenderId() {
-        System.out.println("1: 남자, 2: 여자");
-        System.out.print("성별 코드: ");
+        while (true) {
+            System.out.print("1: 남자, 2: 여자");
+            System.out.print("성별 코드: ");
 
-        return Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine().trim();
+
+            try {
+                int genderId = Integer.parseInt(input);
+
+                if (genderId == 1 || genderId == 2) {
+                    return genderId;
+                }
+
+                System.out.println("1 또는 2만 입력해 주세요");
+            } catch (NumberFormatException exception) {
+                System.out.println("숫자로 입력해 주세요");
+            }
+        }
     }
 
     public String readAddress() {
-        System.out.print("주소: ");
-        return scanner.nextLine();
+        while (true) {
+            System.out.print("주소: ");
+            String input = scanner.nextLine().trim();
+            try {
+                String normalizedAddress = PersonNormalizer.normalizeAddress(input);
+
+                PersonValidator.validateAddress(normalizedAddress);
+
+                return input;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
     }
 
     public String readBank() {
-        System.out.print("은행: ");
-        return scanner.nextLine();
+        while (true) {
+            System.out.print("은행: ");
+            String input = scanner.nextLine().trim();
+            try {
+                String normalizedBank = PersonNormalizer.normalizeBank(input);
+
+                PersonValidator.validateBank(normalizedBank);
+
+                return input;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
     }
 
     public String readAccountNumber() {
-        System.out.print("계좌번호: ");
-        return scanner.nextLine();
+        while (true) {
+            System.out.print("게좌번호: ");
+            String input = scanner.nextLine().trim();
+            try {
+                String normalizedAccountNumber = PersonNormalizer.normalizeAccountNumber(input);
+
+                PersonValidator.validateAccountNumber(normalizedAccountNumber);
+
+                return input;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
     }
 
     public boolean readYesNo(String message) {

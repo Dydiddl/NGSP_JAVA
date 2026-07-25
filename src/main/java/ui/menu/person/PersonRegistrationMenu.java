@@ -1,23 +1,33 @@
 package ui.menu.person;
 
-import service.PersonRegistrationService;
-import ui.input.MenuInputReader;
 import config.UiConfig;
+
+import model.PersonCreate;
+import service.PersonRegistrationService;
+
+import ui.input.MenuInputReader;
 import ui.input.PersonInputReader;
+
+import ui.output.PersonOutput;
+import ui.output.UiOutput;
+
 
 public class PersonRegistrationMenu {
     private final MenuInputReader menuInputReader;
     private final PersonInputReader personInputReader;
     private final PersonRegistrationService personRegistrationService;
+    private final PersonOutput personOutput;
 
     public PersonRegistrationMenu(
             MenuInputReader menuInputReader,
             PersonInputReader personInputReader,
-            PersonRegistrationService personRegistrationService
+            PersonRegistrationService personRegistrationService,
+            PersonOutput personOutput
     ) {
         this.menuInputReader = menuInputReader;
         this.personInputReader = personInputReader;
         this.personRegistrationService = personRegistrationService;
+        this.personOutput = personOutput;
     }
 
     public void run() {
@@ -54,42 +64,66 @@ public class PersonRegistrationMenu {
     }
 
     private void registerPersonManually() {
-        try {
-            System.out.println();
-            System.out.println("사람 정보를 입력하세요.");
+        String name = personInputReader.readName();
+        String phone = personInputReader.readPhone();
+        int genderId = personInputReader.readGenderId();
+        String address = personInputReader.readAddress();
+        String bank = personInputReader.readBank();
+        String accountNumber = personInputReader.readAccountNumber();
 
-            String name = personInputReader.readName();
-            String phone = personInputReader.readPhone();
-            int genderId = personInputReader.readGenderId();
-            String address = personInputReader.readAddress();
-            String bank = personInputReader.readBank();
-            String accountNumber = personInputReader.readAccountNumber();
+        while (true) {
+            PersonCreate personCreate = new PersonCreate(name, phone, genderId, address, bank, accountNumber);
 
-            long personId = personRegistrationService.register(
-                    name,
-                    phone,
-                    genderId,
-                    address,
-                    bank,
-                    accountNumber
-            );
-            System.out.println();
-            System.out.println("사람 등록이 완료되었습니다.");
-            System.out.println("등록된 사람 ID: " + personId);
-        } catch (NumberFormatException exception) {
-            System.out.println();
-            System.out.println("성별 코드는 숫자로 입력해 주세요.");
-        } catch (IllegalArgumentException exception) {
-            System.out.println();
-            System.out.println(exception.getMessage());
+            personOutput.printPersonCreate(personCreate);
 
-        } catch (RuntimeException exception) {
-            System.out.println();
-            System.out.println("사람 등록 중 오류가 발생했습니다.");
-            System.out.println(exception.getMessage());
+            boolean confirmed = personInputReader.readYesNo("이 내용으로 저장하시겠습니까? (Y/N)");
+
+            if (confirmed) {
+                try {
+                    long personId = personRegistrationService.register(
+                            name,
+                            phone,
+                            genderId,
+                            address,
+                            bank,
+                            accountNumber
+                    );
+
+                    System.out.println();
+                    System.out.println("사람 등록이 완료되었습니다.");
+                    System.out.println("등록된 사람 ID: " + personId);
+                    return;
+                } catch (IllegalArgumentException exception) {
+                    System.out.println();
+                    System.out.println(exception.getMessage());
+
+                } catch (RuntimeException exception) {
+                    System.out.println();
+                    System.out.println("사람 등록 중 오류가 발생했습니다.");
+                    System.out.println(exception.getMessage());
+                    return;
+                }
+
+            }
+
+            printEditMenu();
+            int choice = menuInputReader.readChoice();
+
+            switch (choice) {
+            case 1 -> name = personInputReader.readName();
+            case 2 -> phone = personInputReader.readPhone();
+            case 3 -> genderId = personInputReader.readGenderId();
+            case 4 -> address = personInputReader.readAddress();
+            case 5 -> bank = personInputReader.readBank();
+            case 6 -> accountNumber = personInputReader.readAccountNumber();
+            case 0 -> {
+                System.out.print("등록을 취소했습니다.");
+                return;
+            }
+            default -> System.out.println("올바른 번호를 선택해 주세요.");
+            }
         }
     }
-
 
     private void printRegistrationMenu() {
         System.out.println();
@@ -102,4 +136,16 @@ public class PersonRegistrationMenu {
         System.out.println(UiConfig.DIVIDER);
     }
 
+    private void printEditMenu() {
+        System.out.println();
+        UiOutput.printHeader("수정할 항목 선택");
+        System.out.println("1. 이름");
+        System.out.println("2. 전화번호");
+        System.out.println("3. 성별");
+        System.out.println("4. 주소");
+        System.out.println("5. 은행");
+        System.out.println("6. 계좌번호");
+        System.out.println("0. 등록 취소");
+        System.out.println(UiConfig.DIVIDER);
+    }
 }
