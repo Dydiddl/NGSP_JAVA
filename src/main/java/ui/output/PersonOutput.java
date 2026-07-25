@@ -16,9 +16,7 @@ public class PersonOutput {
             return;
         }
 
-        System.out.println(UiConfig.DIVIDER);
-        System.out.println("검색 결과");
-        System.out.println(UiConfig.DIVIDER);
+        UiOutput.printHeader("검색 결과");
 
         for (Person person : persons) {
             printPerson(person);
@@ -27,41 +25,40 @@ public class PersonOutput {
 
     public void printPersonsTable(List<Person> persons) {
         System.out.println();
+
         if(persons.isEmpty()) {
             System.out.println("등록된 사람이 없습니다.");
             return;
         }
 
-        System.out.println(UiConfig.DIVIDER);
-        System.out.println("전체 사람 목록");
-        System.out.println(UiConfig.DIVIDER);
+        UiOutput.printHeader("전체 사람 목록");
 
-        System.out.printf(
-                "%-4s %-8s %-6s %-15s %-25s %-10s %-20s%n",
+        System.out.printf(UiConfig.PERSON_TABLE_FORMAT,
                 "ID",
                 "이름",
                 "성별",
                 "전화번호",
-                "주소",
                 "은행",
-                "계좌번호"
+                "계좌번호",
+                "주소"
         );
 
-        System.out.println(UiConfig.DIVIDER);
+        UiOutput.printTableRowDivider();
 
         for  (Person person : persons) {
             System.out.printf(
-                    "%-4s %-8s %-6s %-15s %-25s %-10s %-20s%n",
+                    UiConfig.PERSON_TABLE_FORMAT,
                     person.getId(),
                     person.getName(),
                     PersonFormatter.formatGender(person.getGenderId()),
-                    PersonFormatter.formatPhone((person.getPhone())),
-                    person.getAddress(),
+                    PersonFormatter.formatPhone(person.getPhone()),
                     person.getBank(),
-                    person.getAccountNumber()
+                    person.getAccountNumber(),
+                    person.getAddress()
             );
         }
-        System.out.println(UiConfig.DIVIDER);
+
+        UiOutput.printTableDivider();
 
     }
 
@@ -74,7 +71,7 @@ public class PersonOutput {
         System.out.println("주소: " + person.getAddress());
         System.out.println("은행: " + person.getBank());
         System.out.println("계좌번호: " + person.getAccountNumber());
-        System.out.println(UiConfig.DIVIDER);
+        UiOutput.printDivider();
     }
 
 }
