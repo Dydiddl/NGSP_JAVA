@@ -72,6 +72,40 @@ public class PersonRepository {
         }
     }
 
+
+    // 저장된 모든 사람 목록
+    public List<Person> findAll() {
+        String sql = """
+                SELECT id, name, phone, genderId, address, bank, accountNumber
+                FROM person
+                ORDER BY id
+        """;
+
+        List<Person> persons = new ArrayList<>();
+
+        try(
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+           while (resultSet.next()) {
+               Person person = new Person(
+                       resultSet.getLong("id"),
+                       resultSet.getString("name"),
+                       resultSet.getString("phone"),
+                       resultSet.getInt("genderId"),
+                       resultSet.getString("address"),
+                       resultSet.getString("bank"),
+                       resultSet.getString("accountNumber")
+               );
+               persons.add(person);
+           }
+           return persons;
+        } catch (SQLException exception) {
+            throw new RuntimeException("전체 사람 목록을 조회하는 중 데이터베이스 오류가 발생했습니다", exception);
+        }
+    }
+
     // Search by name, 이름으로 검색(동명이인등이 함께 검색됨)
     public List<Person> findByName(String name) {
         if (name == null || name.isBlank()) {
@@ -85,9 +119,11 @@ public class PersonRepository {
                 """;
         List<Person> persons = new ArrayList<>();
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)
-                ) {statement.setString(1, name);
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, name);
 
             try (ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){
@@ -166,9 +202,11 @@ public class PersonRepository {
                 """;
         List<Person> persons = new ArrayList<>();
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)
-        ) {statement.setInt(1, genderId);
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setInt(1, genderId);
 
             try (ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){

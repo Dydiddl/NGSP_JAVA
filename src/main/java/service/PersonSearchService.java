@@ -12,11 +12,19 @@ public class PersonSearchService {
     public PersonSearchService(PersonRepository personRepository)
     {this.personRepository = personRepository;}
 
-    public List<Person> findByName(String name) {
+    public List<Person> findAll()
+    {
+        return personRepository.findAll();
+    }
+
+    public List<Person> findByName(String name)
+    {
         return personRepository.findByName(name);
     }
 
-    public List<Person> findByGenderId(int genderId) {
+    public List<Person> findByGenderId(int genderId)
+    {
         return personRepository.findByGenderId(genderId);
     }
+
 }

@@ -44,10 +44,13 @@ public class PersonSearchMenu {
 
             switch (choice) {
                 case 1:
+                    findAll();
+                    break;
+                case 2:
                     lookupByName();
                     break;
 
-                case 2:
+                case 3:
                     lookupByGender();
                     break;
                 case 0:
@@ -63,6 +66,20 @@ public class PersonSearchMenu {
         }
 
     }
+    private void findAll() {
+        try {
+            System.out.println();
+            List<Person> persons = personSearchService.findAll();
+            personOutput.printPersonsTable(persons);
+
+        } catch(RuntimeException exception) {
+            System.out.println();
+            System.out.println("전체 사람 목록을 조회하는 중 오류가 발생했습니다.");
+        }
+
+        menuInputReader.waitForEnter();
+    }
+
     private void lookupByName(){
         try {
             System.out.println();
@@ -109,7 +126,8 @@ public class PersonSearchMenu {
         System.out.println(UiConfig.DIVIDER);
         System.out.println("사람 검색");
         System.out.println(UiConfig.DIVIDER);
-        System.out.println("1. 이름으로 검색");
+        System.out.println("1. 전체 목록");
+        System.out.println("2. 이름으로 검색");
         System.out.println("2. 성별으로 검색");
         System.out.println("0. 사람 관리 메뉴로 돌아가기");
         System.out.println(UiConfig.DIVIDER);
