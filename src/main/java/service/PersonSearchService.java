@@ -9,11 +9,8 @@ public class PersonSearchService {
 
     private final PersonRepository personRepository;
 
-    public PersonSearchService(
-            PersonRepository personRepository
-    ) {
-        this.personRepository = personRepository;
-    }
+    public PersonSearchService(PersonRepository personRepository)
+    {this.personRepository = personRepository;}
 
     public List<Person> findByName(String name) {
         return personRepository.findByName(name);

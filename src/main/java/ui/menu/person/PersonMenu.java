@@ -36,6 +36,7 @@ public class PersonMenu {
                     break;
 
                 case 3:
+                    // personUpdateMenu
                     System.out.println();
                     System.out.println("사람 수정 기능을 준비 중입니다.");
                     menuInputReader.waitForEnter();

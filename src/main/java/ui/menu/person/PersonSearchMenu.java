@@ -12,6 +12,7 @@ import ui.output.PersonOutput;
 
 import java.util.List;
 
+
 public class PersonSearchMenu {
     // 옵션
     // 1. 이름으로 검색
