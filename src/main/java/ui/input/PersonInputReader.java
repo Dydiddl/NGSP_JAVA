@@ -1,5 +1,6 @@
 package ui.input;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class PersonInputReader {
@@ -8,6 +9,11 @@ public class PersonInputReader {
 
     public PersonInputReader(Scanner scanner) {
         this.scanner = scanner;
+    }
+
+    public int readPersonId(){
+        System.out.println("Person ID:");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public String readName() {
@@ -40,5 +46,24 @@ public class PersonInputReader {
     public String readAccountNumber() {
         System.out.print("계좌번호: ");
         return scanner.nextLine();
+    }
+
+    public boolean readYesNo(String message) {
+        while (true) {
+            System.out.println(message);
+
+            String input = scanner.nextLine().trim().toUpperCase();
+
+            if (input.equals("Y")) {
+                return true;
+            }
+
+            if (input.equals("N")) {
+                return false;
+            }
+
+            System.out.println("Y 또는 N만 입력해 주세요.");
+        }
+
     }
 }

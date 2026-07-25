@@ -361,5 +361,30 @@ public class PersonRepository {
         }
     }
 
+    public int updateBankAccount(
+            int personId,
+            String bank,
+            String accountNumber
+    ) {
+        String sql = """
+                UPDATE person
+                SET bank = ?, accountNumber = ?
+                WHERE id = ?
+                """;
+
+        try (
+            Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setString(1, bank);
+            statement.setString(2, accountNumber);
+            statement.setInt(3, personId);
+
+            return statement.executeUpdate();
+        } catch (SQLException exception) {
+            throw new RuntimeException("통장 정보 수정 중 오류가 발생했습니다.", exception);
+        }
+    }
+
     // next
 }

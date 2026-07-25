@@ -8,15 +8,18 @@ public class PersonMenu {
     private final MenuInputReader menuInputReader;
     private final PersonRegistrationMenu personRegistrationMenu;
     private final PersonSearchMenu personSearchMenu;
+    private final PersonUpdateMenu personUpdateMenu;
 
     public PersonMenu(
             MenuInputReader menuInputReader,
             PersonRegistrationMenu personRegistrationMenu,
-            PersonSearchMenu personSearchMenu
+            PersonSearchMenu personSearchMenu,
+            PersonUpdateMenu personUpdateMenu
     ) {
         this.menuInputReader = menuInputReader;
         this.personRegistrationMenu = personRegistrationMenu;
         this.personSearchMenu = personSearchMenu;
+        this.personUpdateMenu = personUpdateMenu;
     }
 
     public void run() {
@@ -37,8 +40,7 @@ public class PersonMenu {
 
                 case 3:
                     // personUpdateMenu
-                    System.out.println();
-                    System.out.println("사람 수정 기능을 준비 중입니다.");
+                    personUpdateMenu.run();
                     menuInputReader.waitForEnter();
                     break;
 

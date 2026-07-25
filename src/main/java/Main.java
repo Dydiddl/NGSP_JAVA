@@ -6,16 +6,18 @@ import repository.PersonRepository;
 
 import service.PersonSearchService;
 import service.PersonRegistrationService;
+import service.PersonUpdateService;
 
 import ui.input.MenuInputReader;
 import ui.input.PersonInputReader;
+
+import ui.output.PersonOutput;
 
 import ui.menu.MainMenu;
 import ui.menu.person.PersonSearchMenu;
 import ui.menu.person.PersonMenu;
 import ui.menu.person.PersonRegistrationMenu;
-import ui.output.PersonOutput;
-
+import ui.menu.person.PersonUpdateMenu;
 
 public class Main {
 
@@ -35,6 +37,7 @@ public class Main {
             // Service
             PersonRegistrationService personRegistrationService = new PersonRegistrationService(personRepository);
             PersonSearchService personSearchService = new PersonSearchService(personRepository);
+            PersonUpdateService personUpdateService = new PersonUpdateService(personRepository);
 
             // Output
             PersonOutput personOutput = new PersonOutput();
@@ -46,23 +49,27 @@ public class Main {
                             personInputReader,
                             personRegistrationService
                     );
-
             PersonSearchMenu personSearchMenu = new PersonSearchMenu(
                     menuInputReader,
                     personInputReader,
                     personSearchService,
                     personOutput
             );
+            PersonUpdateMenu personUpdateMenu = new PersonUpdateMenu(
+                    menuInputReader,
+                    personInputReader,
+                    personUpdateService
+            );
             PersonMenu personMenu = new PersonMenu(
                     menuInputReader,
                     personRegistrationMenu,
-                    personSearchMenu
+                    personSearchMenu,
+                    personUpdateMenu
             );
             MainMenu mainMenu = new MainMenu(
                     menuInputReader,
                     personMenu
             );
-
             mainMenu.run();
 
         }

@@ -32,7 +32,8 @@ public class PersonConfig {
             "기업",
             "우체국",
             "카카오",
-            "경남"
+            "경남",
+            "토스"
     );
 
     // bank account number
