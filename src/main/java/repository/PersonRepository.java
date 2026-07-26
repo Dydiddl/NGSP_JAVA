@@ -1,9 +1,11 @@
 package repository;
 
+import config.PersonConfig;
 import model.PersonCreate;
 import model.Person;
 
 import database.DatabaseConnection;
+import model.PersonStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,11 +77,7 @@ public class PersonRepository {
 
     // 저장된 모든 사람 목록
     public List<Person> findAll() {
-        String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber
-                FROM person
-                ORDER BY id
-        """;
+        String sql = PersonConfig.SELECT_ALL_SQL;
 
         List<Person> persons = new ArrayList<>();
 
@@ -89,16 +87,7 @@ public class PersonRepository {
                 ResultSet resultSet = statement.executeQuery()
         ) {
            while (resultSet.next()) {
-               Person person = new Person(
-                       resultSet.getLong("id"),
-                       resultSet.getString("name"),
-                       resultSet.getString("phone"),
-                       resultSet.getInt("genderId"),
-                       resultSet.getString("address"),
-                       resultSet.getString("bank"),
-                       resultSet.getString("accountNumber")
-               );
-               persons.add(person);
+               persons.add(mapToPerson(resultSet));
            }
            return persons;
         } catch (SQLException exception) {
@@ -112,7 +101,7 @@ public class PersonRepository {
             throw new IllegalArgumentException("검색할 이름을 입력하세요.");
         }
         String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber
+                SELECT id, name, phone, genderId, address, bank, accountNumber,  status
                 FROM person
                 WHERE name = ?
                 ORDER BY id
@@ -127,16 +116,7 @@ public class PersonRepository {
 
             try (ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){
-                    Person person = new Person(
-                            resultSet.getLong("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("phone"),
-                            resultSet.getInt("genderId"),
-                            resultSet.getString("address"),
-                            resultSet.getString("bank"),
-                            resultSet.getString("accountNumber")
-                    );
-                    persons.add(person);
+                    persons.add(mapToPerson(resultSet));
                 }
             }
             return persons;
@@ -153,7 +133,7 @@ public class PersonRepository {
     // personId로 검색하기 때문에 항상 1명만 검색됨
     public Optional<Person> findById(int personId) {
         String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber
+                SELECT id, name, phone, genderId, address, bank, accountNumber,  status
                 FROM person
                 WHERE id = ?
                 """;
@@ -165,21 +145,12 @@ public class PersonRepository {
 
             try (ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()) {
-                    Person person = new Person(
-                            resultSet.getLong("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("phone"),
-                            resultSet.getInt("genderId"),
-                            resultSet.getString("address"),
-                            resultSet.getString("bank"),
-                            resultSet.getString("accountNumber")
-                    );
-                    return Optional.of(person);
+                    return Optional.of(mapToPerson(resultSet));
                 }
 
+                return Optional.empty();
             }
 
-                return Optional.empty();
         } catch (SQLException exception) {
                 throw new RuntimeException("ID로 사람을 조회하는 중 데이터베이스 오류가 발생했습니다.", exception);
             }
@@ -195,7 +166,7 @@ public class PersonRepository {
         }
 
         String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber
+                SELECT id, name, phone, genderId, address, bank, accountNumber, status
                 FROM person
                 WHERE genderId = ?
                 ORDER BY id
@@ -210,16 +181,7 @@ public class PersonRepository {
 
             try (ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){
-                    Person person = new Person(
-                            resultSet.getLong("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("phone"),
-                            resultSet.getInt("genderId"),
-                            resultSet.getString("address"),
-                            resultSet.getString("bank"),
-                            resultSet.getString("accountNumber")
-                    );
-                    persons.add(person);
+                    persons.add(mapToPerson(resultSet));
                 }
             }
             return persons;
@@ -387,4 +349,16 @@ public class PersonRepository {
     }
 
     // next
+    private Person mapToPerson(ResultSet resultSet) throws SQLException {
+        return new Person(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getString("phone"),
+                resultSet.getInt("genderId"),
+                resultSet.getString("address"),
+                resultSet.getString("bank"),
+                resultSet.getString("accountNumber"),
+                PersonStatus.valueOf(resultSet.getString("status"))
+        );
+    }
 }

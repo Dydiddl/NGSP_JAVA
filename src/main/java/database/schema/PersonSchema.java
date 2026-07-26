@@ -24,12 +24,15 @@ public final class PersonSchema {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL UNIQUE,
-                genderId INTEGER NOT NULL,
+                gender_id INTEGER NOT NULL,
                 address TEXT NOT NULL,
                 bank TEXT NOT NULL,
-                accountNumber TEXT NOT NULL,
+                account_umber TEXT NOT NULL,
+                
+                status TEXT NOT NULL DEFAULT 'AVAILABLE',
                 FOREIGN KEY (genderId)
                     REFERENCES gender (id)
+                
             )
             """;
 

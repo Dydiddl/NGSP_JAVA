@@ -39,6 +39,20 @@ public class PersonConfig {
     // bank account number
     public static final int ACCOUNT_NUMBER_MIN_LENGTH = 10;
     public static final int ACCOUNT_NUMBER_MAX_LENGTH = 30;
-
-
+    public static final String PERSON_COLUMNS = """
+            id,
+            name,
+            phone,
+            gender_id,
+            address,
+            bank,
+            account_number,
+            status
+            """;
+    public static final String SELECT_ALL_SQL =
+            "SELECT " + PERSON_COLUMNS + """
+                    
+                    FROM person
+                    ORDER BY id
+                    """;
 }

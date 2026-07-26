@@ -9,6 +9,7 @@ public class Person {
     private final String address;
     private final String bank;
     private final String accountNumber;
+    private final PersonStatus status;
 
     public Person(
             long id,
@@ -17,7 +18,8 @@ public class Person {
             int genderId,
             String address,
             String bank,
-            String accountNumber
+            String accountNumber,
+            PersonStatus status
     ) {
         this.id = id;
         this.name = name;
@@ -26,35 +28,18 @@ public class Person {
         this.address = address;
         this.bank = bank;
         this.accountNumber = accountNumber;
+        this.status = status;
     }
 
-    public long getId() {
-        return id;
-    }
+    public long getId() {return id;}
+    public String getName() {return name;}
+    public String getPhone() {return phone;}
+    public int getGenderId() {return genderId;}
+    public String getAddress() {return address;}
+    public String getBank() {return bank;}
+    public String getAccountNumber() {return accountNumber;}
+    public PersonStatus getStatus() {return status;}
 
-    public String getName() {
-        return name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public int getGenderId() {
-        return genderId;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getBank() {
-        return bank;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
 
     @Override
     public String toString() {
@@ -66,6 +51,7 @@ public class Person {
                 ", address='" + address + '\'' +
                 ", bank='" + bank + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

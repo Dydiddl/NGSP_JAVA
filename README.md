@@ -1,7 +1,8 @@
 # NGSP_JAVA
 
-> **Namgang Landscape System Project — Java Edition**
-> Java와 SQLite를 기반으로 개발 중인 터미널(CLI) 기반 회사 업무 관리 시스템
+> ## **Namgang Landscape System Project**
+
+Java와 SQLite를 기반으로 개발하는 **남강조경 인력,공사 관리 시스템**
 
 ---
 
@@ -9,9 +10,11 @@
 
 NGSP_JAVA는 **남강조경의 업무를 체계적으로 관리하기 위해 개발 중인 Java 기반 ERP 프로젝트**입니다.
 
-단순한 CRUD 프로그램을 만드는 것에 그치지 않고, 회사에서 발생하는 사람, 공사, 현장, 출근, 급여, 계약 등의 업무를 객체 중심으로 관리할 수 있는 장기적인 시스템을 목표로 합니다.
+실제 사용할 **인력자원 관리(Workforce Management) 시스템을 목표로 개발하고 있습니다.
 
 현재는 **사람(Person) 관리 기능**을 중심으로 기본 구조를 구축하고 있으며, 이후 공사(Project), 현장(Work Site), 출근(Attendance), 급여(Payroll), 계약(Contract) 등의 기능으로 확장할 예정입니다.
+
+사람(Person)은 회사가 관리하는 **인력 자원(Resource)**을 위미합니다.
 
 ---
 
@@ -45,6 +48,8 @@ v0.2.0
 * CSV 파일을 이용한 대량 등록 지원
 * 공사 및 회사 업무 관리 기능으로 확장
 * 향후 GUI 또는 Web 환경으로 확장 가능한 구조
+* 실제 업무에 사용할 수 있는 프로그램 개발
+* 사람, 공사, 현장, 출근, 급여 데이터의 독립적 관리
 
 ---
 
@@ -458,7 +463,7 @@ IllegalArgumentException 발생
 
 ---
 
-## 다음 개발 계획
+## 개발 로드맵
 
 ### Person 관리
 
