@@ -36,6 +36,8 @@ public class PersonOutput {
 
         UiOutput.printHeader("전체 사람 목록");
 
+        UiOutput.printTableDivider();
+
         System.out.printf(UiConfig.PERSON_TABLE_FORMAT,
                 "ID",
                 "이름",

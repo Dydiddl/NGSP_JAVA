@@ -31,10 +31,12 @@ public class PersonMenu {
 
             switch (choice) {
                 case 1:
+                    // Person register Menu
                     personRegistrationMenu.run();
                     break;
 
                 case 2:
+                    // person Search Menu
                     personSearchMenu.run();
                     break;
 

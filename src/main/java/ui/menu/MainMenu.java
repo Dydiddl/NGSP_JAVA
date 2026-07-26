@@ -1,7 +1,9 @@
 package ui.menu;
 
 import config.UiConfig;
+
 import ui.input.MenuInputReader;
+
 import ui.menu.person.PersonMenu;
 
 public class MainMenu {
@@ -25,28 +27,32 @@ public class MainMenu {
 
             switch (choice) {
                 case 1:
+                    // 사람 관리 메뉴
                     personMenu.run();
                     break;
+
                 case 2:
                     System.out.println();
                     System.out.println("공사 관리 메뉴를 준비 중입니다.");
                     menuInputReader.waitForEnter();
                     break;
+
                 case 3:
                     System.out.println();
                     System.out.println("현장 관리 메뉴를 준비 중입니다.");
                     menuInputReader.waitForEnter();
                     break;
+
                 case 0:
                     running = false;
                     System.out.println();
                     System.out.println("프로그램을 종료합니다.");
                     break;
+
                 default:
                     System.out.println();
                     System.out.println("올바른 메뉴 번호를 입력해 주세요.");
                     menuInputReader.waitForEnter();
-
             }
         }
     }

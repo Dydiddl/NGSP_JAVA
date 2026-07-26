@@ -8,9 +8,7 @@ CSV로 일괄 등록 기능 구현
 
 # 작업
 
-personRepository 작성 중
-
-PersonUpdateService 작성
+사람 직위 보직 이동 및 해고 등 상태 변경 기능 추가,
 
 ## commit goal
 

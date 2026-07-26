@@ -40,7 +40,6 @@ public class PersonRegistrationMenu {
             switch (choice) {
                 case 1:
                     registerPersonManually();
-                    menuInputReader.waitForEnter();
                     break;
 
                 case 2:

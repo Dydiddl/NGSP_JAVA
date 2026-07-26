@@ -244,7 +244,7 @@ public class PersonRepository {
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, name);
             statement.setInt(2, personId);
@@ -265,7 +265,7 @@ public class PersonRepository {
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, phone);
             statement.setInt(2, personId);
@@ -286,7 +286,7 @@ public class PersonRepository {
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setInt(1, genderId);
             statement.setInt(2, personId);
@@ -307,7 +307,7 @@ public class PersonRepository {
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, address);
             statement.setInt(2, personId);
@@ -328,7 +328,7 @@ public class PersonRepository {
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, bank);
             statement.setInt(2, personId);
@@ -349,7 +349,7 @@ public class PersonRepository {
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, accountNumber);
             statement.setInt(2, personId);
@@ -374,7 +374,7 @@ public class PersonRepository {
 
         try (
             Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, bank);
             statement.setString(2, accountNumber);

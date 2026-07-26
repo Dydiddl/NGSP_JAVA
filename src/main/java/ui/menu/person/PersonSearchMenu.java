@@ -44,21 +44,29 @@ public class PersonSearchMenu {
 
             switch (choice) {
                 case 1:
+
                     findAll();
                     break;
+
                 case 2:
+
                     lookupByName();
                     break;
 
                 case 3:
+
                     lookupByGender();
                     break;
+
                 case 0:
+
                     running = false;
                     System.out.println();
                     System.out.println("사람 관리 메뉴로 돌아갑니다.");
                     break;
+
                 default:
+
                     System.out.println();
                     System.out.println("올바른 메뉴 번호를 입력해 주세요.");
                     menuInputReader.waitForEnter();

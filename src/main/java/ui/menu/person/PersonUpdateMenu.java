@@ -61,7 +61,8 @@ public class PersonUpdateMenu {
                     // 성별 변경
                     updateGenderId();
                     break;
-
+                case 6:
+                    // 일괄 수정(이름, 전화번호 등등)
                 case 0:
                     // 사람 관리 메뉴로 돌아가기
                     running = false;
