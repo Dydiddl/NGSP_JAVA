@@ -55,10 +55,10 @@ public class PersonOutput {
                     UiConfig.PERSON_TABLE_FORMAT,
                     person.id(),
                     person.name(),
-                    PersonFormatter.formatGender(person.genderId()),
+                    PersonFormatter.formatGender(person.gender_id()),
                     PersonFormatter.formatPhone(person.phone()),
                     person.bank(),
-                    person.accountNumber(),
+                    person.account_number(),
                     person.address()
             );
         }
@@ -71,10 +71,10 @@ public class PersonOutput {
         UiOutput.printHeader("등록 결과");
         System.out.println("이름: " + person.name());
         System.out.println("전화번호: " + PersonFormatter.formatPhone(person.phone()));
-        System.out.println("성별:  " + PersonFormatter.formatGender(person.genderId()));
+        System.out.println("성별:  " + PersonFormatter.formatGender(person.gender_id()));
         System.out.println("주소: " + person.address());
         System.out.println("은행: " + person.bank());
-        System.out.println("계좌번호: " + person.accountNumber());
+        System.out.println("계좌번호: " + person.account_number());
         UiOutput.printDivider();
     }
 
@@ -82,11 +82,11 @@ public class PersonOutput {
     private void printPerson(Person person) {
         System.out.println("ID: " + person.id());
         System.out.println("이름: " + person.name());
-        System.out.println("성별: " + PersonFormatter.formatGender(person.genderId()));
+        System.out.println("성별: " + PersonFormatter.formatGender(person.gender_id()));
         System.out.println("전화번호: " + PersonFormatter.formatPhone(person.phone()));
         System.out.println("주소: " + person.address());
         System.out.println("은행: " + person.bank());
-        System.out.println("계좌번호: " + person.accountNumber());
+        System.out.println("계좌번호: " + person.account_number());
         UiOutput.printDivider();
     }
 

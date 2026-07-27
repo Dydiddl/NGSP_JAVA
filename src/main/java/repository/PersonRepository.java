@@ -31,10 +31,10 @@ public class PersonRepository {
                 INSERT INTO person (
                     name,
                     phone,
-                    genderId,
+                    gender_id,
                     address,
                     bank,
-                    accountNumber
+                    account_number
                 )
                 VALUES (?, ?, ?, ?, ?, ?)
                 """;
@@ -48,10 +48,10 @@ public class PersonRepository {
         ) {
             statement.setString(1, person.name());
             statement.setString(2, person.phone());
-            statement.setInt(3, person.genderId());
+            statement.setInt(3, person.gender_id());
             statement.setString(4, person.address());
             statement.setString(5, person.bank());
-            statement.setString(6, person.accountNumber());
+            statement.setString(6, person.account_number());
 
             int affectedRows = statement.executeUpdate();
 
@@ -102,7 +102,7 @@ public class PersonRepository {
             throw new IllegalArgumentException("검색할 이름을 입력하세요.");
         }
         String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber,  status
+                SELECT id, name, phone, gender_id, address, bank, account_number,  status
                 FROM person
                 WHERE name = ?
                 ORDER BY id
@@ -135,7 +135,7 @@ public class PersonRepository {
     // personId로 검색하기 때문에 항상 1명만 검색됨
     public Optional<Person> findById(int personId) {
         String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber,  status
+                SELECT id, name, phone, gender_id, address, bank, account_number,  status
                 FROM person
                 WHERE id = ?
                 """;
@@ -166,9 +166,9 @@ public class PersonRepository {
         }
 
         String sql = """
-                SELECT id, name, phone, genderId, address, bank, accountNumber, status
+                SELECT id, name, phone, gender_id, address, bank, account_number, status
                 FROM person
-                WHERE genderId = ?
+                WHERE gender_id = ?
                 ORDER BY id
                 """;
         List<Person> persons = new ArrayList<>();
@@ -188,7 +188,7 @@ public class PersonRepository {
 
         } catch (SQLException exception) {
             throw new RuntimeException(
-                    "성별으로 사람을 검색하는 중 데이터베이스 오류가 발생했습니다.",
+                    "성별로 사람을 검색하는 중 데이터베이스 오류가 발생했습니다.",
                     exception
             );
         }
@@ -239,7 +239,7 @@ public class PersonRepository {
     public int updateAccountNumber(int personId, String accountNumber) {
         return updateStringField(
                 personId,
-                "accountNumber",
+                "account_number",
                 accountNumber,
                 "사람 계좌번호 수정 중 오류가 발생했습니다."
         );
@@ -249,7 +249,7 @@ public class PersonRepository {
     public int updateGenderId(int personId, int genderId) {
         String sql = """
                 UPDATE person
-                SET genderId = ?
+                SET gender_id = ?
                 WHERE id = ?
                 """;
 
@@ -275,7 +275,7 @@ public class PersonRepository {
     ) {
         String sql = """
                 UPDATE person
-                SET bank = ?, accountNumber = ?
+                SET bank = ?, account_number = ?
                 WHERE id = ?
                 """;
 
@@ -319,16 +319,16 @@ public class PersonRepository {
     }
 
 
-    // next
+    // mapToPerson 중복코드
     private Person mapToPerson(ResultSet resultSet) throws SQLException {
         return new Person(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
                 resultSet.getString("phone"),
-                resultSet.getInt("genderId"),
+                resultSet.getInt("gender_id"),
                 resultSet.getString("address"),
                 resultSet.getString("bank"),
-                resultSet.getString("accountNumber"),
+                resultSet.getString("account_number"),
                 PersonStatus.valueOf(resultSet.getString("status"))
         );
     }

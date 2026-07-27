@@ -11,13 +11,11 @@ import service.PersonUpdateService;
 import ui.input.MenuInputReader;
 import ui.input.PersonInputReader;
 
+import ui.menu.person.*;
 import ui.output.PersonOutput;
 
 import ui.menu.MainMenu;
-import ui.menu.person.PersonSearchMenu;
-import ui.menu.person.PersonMenu;
-import ui.menu.person.PersonRegistrationMenu;
-import ui.menu.person.PersonUpdateMenu;
+
 
 public class Main {
 
@@ -31,48 +29,52 @@ public class Main {
             MenuInputReader menuInputReader = new MenuInputReader(scanner);
             PersonInputReader personInputReader = new PersonInputReader(scanner);
 
-            // Repository
-            PersonRepository personRepository = new PersonRepository();
-
-            // Service
-            PersonRegistrationService personRegistrationService = new PersonRegistrationService(personRepository);
-            PersonSearchService personSearchService = new PersonSearchService(personRepository);
-            PersonUpdateService personUpdateService = new PersonUpdateService(personRepository);
-
-            // Output
-            PersonOutput personOutput = new PersonOutput();
-
             // Menu
-            PersonRegistrationMenu personRegistrationMenu =
-                    new PersonRegistrationMenu(
-                            menuInputReader,
-                            personInputReader,
-                            personRegistrationService,
-                            personOutput
-                    );
-            PersonSearchMenu personSearchMenu = new PersonSearchMenu(
-                    menuInputReader,
-                    personInputReader,
-                    personSearchService,
-                    personOutput
-            );
-            PersonUpdateMenu personUpdateMenu = new PersonUpdateMenu(
-                    menuInputReader,
-                    personInputReader,
-                    personUpdateService
-            );
-            PersonMenu personMenu = new PersonMenu(
-                    menuInputReader,
-                    personRegistrationMenu,
-                    personSearchMenu,
-                    personUpdateMenu
-            );
-            MainMenu mainMenu = new MainMenu(
-                    menuInputReader,
-                    personMenu
-            );
+            PersonMenu personMenu = createPersonMenu(menuInputReader, personInputReader);
+            MainMenu mainMenu = new MainMenu(menuInputReader, personMenu);
             mainMenu.run();
-
         }
+    }
+
+    private static PersonMenu createPersonMenu(
+            MenuInputReader menuInputReader,
+            PersonInputReader personInputReader
+    ) {
+        PersonRepository personRepository = new PersonRepository();
+
+        PersonRegistrationService personRegistrationService = new PersonRegistrationService(personRepository);
+        PersonSearchService personSearchService = new PersonSearchService(personRepository);
+        PersonUpdateService personUpdateService = new PersonUpdateService(personRepository);
+        PersonOutput personOutput = new PersonOutput();
+        PersonRegistrationMenu registrationMenu = new PersonRegistrationMenu(
+                menuInputReader,
+                personInputReader,
+                personRegistrationService,
+                personOutput
+        );
+        PersonSearchMenu searchMenu = new PersonSearchMenu(
+                menuInputReader,
+                personInputReader,
+                personSearchService,
+                personOutput
+        );
+
+        PersonUpdateMenu updateMenu = new PersonUpdateMenu(
+                menuInputReader,
+                personInputReader,
+                personUpdateService
+        );
+        PersonStatusMenu statusMenu = new PersonStatusMenu(
+        );
+
+        return new PersonMenu(
+                menuInputReader,
+                personSearchService,
+                personOutput,
+                registrationMenu,
+                searchMenu,
+                updateMenu,
+                statusMenu
+        );
     }
 }

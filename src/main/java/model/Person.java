@@ -4,10 +4,10 @@ public record Person(
         long id,
         String name,
         String phone,
-        int genderId,
+        int gender_id,
         String address,
         String bank,
-        String accountNumber,
+        String account_number,
         PersonStatus status
 ) {
     @Override
@@ -16,10 +16,10 @@ public record Person(
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", genderId=" + genderId +
+                ", gender_id=" + gender_id +
                 ", address='" + address + '\'' +
                 ", bank='" + bank + '\'' +
-                ", accountNumber='" + accountNumber + '\'' +
+                ", accountNumber='" + account_number + '\'' +
                 ", status=" + status +
                 '}';
     }

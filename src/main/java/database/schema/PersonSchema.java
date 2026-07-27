@@ -27,12 +27,10 @@ public final class PersonSchema {
                 gender_id INTEGER NOT NULL,
                 address TEXT NOT NULL,
                 bank TEXT NOT NULL,
-                account_umber TEXT NOT NULL,
-                
+                account_number TEXT NOT NULL,
                 status TEXT NOT NULL DEFAULT 'AVAILABLE',
-                FOREIGN KEY (genderId)
+                FOREIGN KEY (gender_id)
                     REFERENCES gender (id)
-                
             )
             """;
 

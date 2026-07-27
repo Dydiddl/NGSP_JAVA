@@ -3,20 +3,20 @@ package model;
 public record PersonCreate(
         String name,
         String phone,
-        int genderId,
+        int gender_id,
         String address,
         String bank,
-        String accountNumber
+        String account_number
 ) {
     @Override
     public String toString() {
         return "PersonCreate{" +
                 "name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", genderId=" + genderId +
+                ", gender_id=" + gender_id +
                 ", address='" + address + '\'' +
                 ", bank='" + bank + '\'' +
-                ", accountNumber='" + accountNumber + '\'' +
+                ", account_number='" + account_number + '\'' +
                 '}';
     }
 }
