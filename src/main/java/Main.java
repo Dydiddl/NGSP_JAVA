@@ -6,6 +6,7 @@ import repository.PersonRepository;
 
 import service.PersonSearchService;
 import service.PersonRegistrationService;
+import service.PersonStatusService;
 import service.PersonUpdateService;
 
 import ui.input.MenuInputReader;
@@ -45,6 +46,7 @@ public class Main {
         PersonRegistrationService personRegistrationService = new PersonRegistrationService(personRepository);
         PersonSearchService personSearchService = new PersonSearchService(personRepository);
         PersonUpdateService personUpdateService = new PersonUpdateService(personRepository);
+        PersonStatusService personStatusService = new PersonStatusService(personRepository);
         PersonOutput personOutput = new PersonOutput();
         PersonRegistrationMenu registrationMenu = new PersonRegistrationMenu(
                 menuInputReader,
@@ -65,6 +67,9 @@ public class Main {
                 personUpdateService
         );
         PersonStatusMenu statusMenu = new PersonStatusMenu(
+                menuInputReader,
+                personInputReader,
+                personStatusService
         );
 
         return new PersonMenu(

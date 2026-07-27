@@ -28,7 +28,7 @@ public final class PersonSchema {
                 address TEXT NOT NULL,
                 bank TEXT NOT NULL,
                 account_number TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'AVAILABLE',
+                status TEXT NOT NULL DEFAULT 'ACTIVE',
                 FOREIGN KEY (gender_id)
                     REFERENCES gender (id)
             )

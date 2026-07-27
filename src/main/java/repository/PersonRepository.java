@@ -245,6 +245,27 @@ public class PersonRepository {
         );
     }
 
+    public boolean updateStatus(long personId, PersonStatus status) {
+        String sql = """
+                UPDATE person
+                SET status = ?
+                WHERE id = ?
+                """;
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, status.name());
+            statement.setLong(2, personId);
+            return statement.executeUpdate() == 1;
+        } catch (SQLException exception) {
+            throw new RuntimeException(
+                    "사람의 재직 상태를 변경하는 중 데이터베이스 오류가 발생했습니다.",
+                    exception
+            );
+        }
+    }
+
     // int
     public int updateGenderId(int personId, int genderId) {
         String sql = """

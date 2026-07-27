@@ -1,8 +1,8 @@
 package model;
 
 public enum PersonStatus {
-    AVAILABLE("활성화"),
-    UNAVAILABLE("투입불가"),
+    ACTIVE("활성화"),
+    INACTIVE("투입불가"),
     ARCHIVED("보관");
 
     private final String displayName;
