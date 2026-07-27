@@ -46,12 +46,12 @@ public class PersonRepository {
                 )
 
         ) {
-            statement.setString(1, person.getName());
-            statement.setString(2, person.getPhone());
-            statement.setInt(3, person.getGenderId());
-            statement.setString(4, person.getAddress());
-            statement.setString(5, person.getBank());
-            statement.setString(6, person.getAccountNumber());
+            statement.setString(1, person.name());
+            statement.setString(2, person.phone());
+            statement.setInt(3, person.genderId());
+            statement.setString(4, person.address());
+            statement.setString(5, person.bank());
+            statement.setString(6, person.accountNumber());
 
             int affectedRows = statement.executeUpdate();
 
@@ -81,19 +81,20 @@ public class PersonRepository {
 
         List<Person> persons = new ArrayList<>();
 
-        try(
+        try (
                 Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()
         ) {
-           while (resultSet.next()) {
-               persons.add(mapToPerson(resultSet));
-           }
-           return persons;
+            while (resultSet.next()) {
+                persons.add(mapToPerson(resultSet));
+            }
+            return persons;
         } catch (SQLException exception) {
             throw new RuntimeException("전체 사람 목록을 조회하는 중 데이터베이스 오류가 발생했습니다", exception);
         }
     }
+
 
     // Search by name, 이름으로 검색(동명이인등이 함께 검색됨)
     public List<Person> findByName(String name) {
@@ -114,14 +115,14 @@ public class PersonRepository {
         ) {
             statement.setString(1, name);
 
-            try (ResultSet resultSet = statement.executeQuery()){
-                while (resultSet.next()){
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
                     persons.add(mapToPerson(resultSet));
                 }
             }
             return persons;
 
-            } catch (SQLException exception) {
+        } catch (SQLException exception) {
             throw new RuntimeException(
                     "이름으로 사람을 검색하는 중 데이터베이스 오류가 발생했습니다.",
                     exception
@@ -129,6 +130,7 @@ public class PersonRepository {
         }
 
     }
+
 
     // personId로 검색하기 때문에 항상 1명만 검색됨
     public Optional<Person> findById(int personId) {
@@ -138,12 +140,12 @@ public class PersonRepository {
                 WHERE id = ?
                 """;
         try (
-            Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setInt(1, personId);
 
-            try (ResultSet resultSet = statement.executeQuery()){
+            try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.of(mapToPerson(resultSet));
                 }
@@ -152,11 +154,9 @@ public class PersonRepository {
             }
 
         } catch (SQLException exception) {
-                throw new RuntimeException("ID로 사람을 조회하는 중 데이터베이스 오류가 발생했습니다.", exception);
-            }
+            throw new RuntimeException("ID로 사람을 조회하는 중 데이터베이스 오류가 발생했습니다.", exception);
+        }
     }
-
-
 
 
     // Search by gender
@@ -179,8 +179,8 @@ public class PersonRepository {
         ) {
             statement.setInt(1, genderId);
 
-            try (ResultSet resultSet = statement.executeQuery()){
-                while (resultSet.next()){
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
                     persons.add(mapToPerson(resultSet));
                 }
             }
@@ -197,48 +197,55 @@ public class PersonRepository {
 
 
     // Update
+    // String
     public int updateName(int personId, String name) {
-        String sql = """
-                UPDATE person
-                SET name = ?
-                WHERE id = ?
-                """;
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, name);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("사람 이름 수정 중 오류가 발생했습니다.", exception);
-        }
+        return updateStringField(
+                personId,
+                "name",
+                name,
+                "사람 이름 수정 중 오류가 발생했습니다."
+        );
     }
 
     public int updatePhone(int personId, String phone) {
-        String sql = """
-                UPDATE person
-                SET phone = ?
-                WHERE id = ?
-                """;
+        return updateStringField(
+                personId,
+                "phone",
+                phone,
+                "사람 전화번호 수정 중 오류가 발생했습니다."
+        );
 
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, phone);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("핸드폰 번호 수정 중 오류가 발생했습니다.", exception);
-        }
     }
 
+    public int updateAddress(int personId, String address) {
+
+        return updateStringField(
+                personId,
+                "address",
+                address,
+                "사람 주소 수정 중 오류가 발생했습니다."
+        );
+    }
+
+    public int updateBank(int personId, String bank) {
+        return updateStringField(
+                personId,
+                "bank",
+                bank,
+                "사람 은행 수정 중 오류가 발생했습니다."
+        );
+    }
+
+    public int updateAccountNumber(int personId, String accountNumber) {
+        return updateStringField(
+                personId,
+                "accountNumber",
+                accountNumber,
+                "사람 계좌번호 수정 중 오류가 발생했습니다."
+        );
+    }
+
+    // int
     public int updateGenderId(int personId, int genderId) {
         String sql = """
                 UPDATE person
@@ -260,69 +267,7 @@ public class PersonRepository {
         }
     }
 
-    public int updateAddress(int personId, String address) {
-        String sql = """
-                UPDATE person
-                SET address = ?
-                WHERE id = ?
-                """;
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, address);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("사람 주소 수정 중 오류가 발생했습니다.", exception);
-        }
-    }
-
-    public int updateBank(int personId, String bank) {
-        String sql = """
-                UPDATE person
-                SET bank = ?
-                WHERE id = ?
-                """;
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, bank);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("사람 통장 은행 수정 중 오류가 발생했습니다.", exception);
-        }
-    }
-
-    public int updateAccountNumber(int personId, String accountNumber) {
-        String sql = """
-                UPDATE person
-                SET accountNumber = ?
-                WHERE id = ?
-                """;
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, accountNumber);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("사람 계좌번호 수정 중 오류가 발생했습니다.", exception);
-        }
-    }
-
+    // 2종류 혼합
     public int updateBankAccount(
             int personId,
             String bank,
@@ -335,8 +280,8 @@ public class PersonRepository {
                 """;
 
         try (
-            Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, bank);
             statement.setString(2, accountNumber);
@@ -347,6 +292,32 @@ public class PersonRepository {
             throw new RuntimeException("통장 정보 수정 중 오류가 발생했습니다.", exception);
         }
     }
+
+    // 공통 필드 String ver
+    private int updateStringField(
+            int personId,
+            String columnName,
+            String value,
+            String errorMessage) {
+        String sql = """
+                UPDATE person
+                SET %s = ?
+                WHERE id = ?
+                """.formatted(columnName);
+
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, value);
+            statement.setInt(2, personId);
+
+            return statement.executeUpdate();
+        } catch (SQLException exception) {
+            throw new RuntimeException(errorMessage, exception);
+        }
+    }
+
 
     // next
     private Person mapToPerson(ResultSet resultSet) throws SQLException {

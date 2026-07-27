@@ -3,7 +3,6 @@ package ui.input;
 import normalizer.PersonNormalizer;
 import validator.PersonValidator;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 public class PersonInputReader {

@@ -47,6 +47,7 @@ public class PersonMenu {
                     break;
 
                 case 4:
+                    // person
                     System.out.println();
                     System.out.println("사람 삭제 기능을 준비 중입니다.");
                     menuInputReader.waitForEnter();

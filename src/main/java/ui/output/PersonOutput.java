@@ -53,13 +53,13 @@ public class PersonOutput {
         for  (Person person : persons) {
             System.out.printf(
                     UiConfig.PERSON_TABLE_FORMAT,
-                    person.getId(),
-                    person.getName(),
-                    PersonFormatter.formatGender(person.getGenderId()),
-                    PersonFormatter.formatPhone(person.getPhone()),
-                    person.getBank(),
-                    person.getAccountNumber(),
-                    person.getAddress()
+                    person.id(),
+                    person.name(),
+                    PersonFormatter.formatGender(person.genderId()),
+                    PersonFormatter.formatPhone(person.phone()),
+                    person.bank(),
+                    person.accountNumber(),
+                    person.address()
             );
         }
 
@@ -69,24 +69,24 @@ public class PersonOutput {
 
     public void printPersonCreate(PersonCreate person){
         UiOutput.printHeader("등록 결과");
-        System.out.println("이름: " + person.getName());
-        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.getPhone()));
-        System.out.println("성별:  " + PersonFormatter.formatGender(person.getGenderId()));
-        System.out.println("주소: " + person.getAddress());
-        System.out.println("은행: " + person.getBank());
-        System.out.println("계좌번호: " + person.getAccountNumber());
+        System.out.println("이름: " + person.name());
+        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.phone()));
+        System.out.println("성별:  " + PersonFormatter.formatGender(person.genderId()));
+        System.out.println("주소: " + person.address());
+        System.out.println("은행: " + person.bank());
+        System.out.println("계좌번호: " + person.accountNumber());
         UiOutput.printDivider();
     }
 
 
     private void printPerson(Person person) {
-        System.out.println("ID: " + person.getId());
-        System.out.println("이름: " + person.getName());
-        System.out.println("성별: " + PersonFormatter.formatGender(person.getGenderId()));
-        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.getPhone()));
-        System.out.println("주소: " + person.getAddress());
-        System.out.println("은행: " + person.getBank());
-        System.out.println("계좌번호: " + person.getAccountNumber());
+        System.out.println("ID: " + person.id());
+        System.out.println("이름: " + person.name());
+        System.out.println("성별: " + PersonFormatter.formatGender(person.genderId()));
+        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.phone()));
+        System.out.println("주소: " + person.address());
+        System.out.println("은행: " + person.bank());
+        System.out.println("계좌번호: " + person.accountNumber());
         UiOutput.printDivider();
     }
 
