@@ -59,11 +59,13 @@ public class PersonMenu {
                     personStatusMenu.run();
                     break;
                 case 0:
+                    // 메인 메뉴로 돌아가기
                     System.out.println();
                     System.out.println("메인 메뉴로 돌아갑니다.");
                     menuInputReader.waitForEnter();
                     return;
                 default:
+                    // 잘못된 값을 입력 받알을 시
                     System.out.println();
                     System.out.println("올바른 메뉴 번호를 입력해 주세요.");
                     menuInputReader.waitForEnter();

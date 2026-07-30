@@ -71,7 +71,14 @@ public class PersonRegistrationMenu {
         String accountNumber = personInputReader.readAccountNumber();
 
         while (true) {
-            PersonCreate personCreate = new PersonCreate(name, phone, genderId, address, bank, accountNumber);
+            PersonCreate personCreate = new PersonCreate(
+                    name,
+                    phone,
+                    genderId,
+                    address,
+                    bank,
+                    accountNumber
+            );
 
             personOutput.printPersonCreate(personCreate);
 
@@ -109,17 +116,17 @@ public class PersonRegistrationMenu {
             int choice = menuInputReader.readChoice();
 
             switch (choice) {
-            case 1 -> name = personInputReader.readName();
-            case 2 -> phone = personInputReader.readPhone();
-            case 3 -> genderId = personInputReader.readGenderId();
-            case 4 -> address = personInputReader.readAddress();
-            case 5 -> bank = personInputReader.readBank();
-            case 6 -> accountNumber = personInputReader.readAccountNumber();
-            case 0 -> {
-                System.out.print("등록을 취소했습니다.");
-                return;
-            }
-            default -> System.out.println("올바른 번호를 선택해 주세요.");
+                case 1 -> name = personInputReader.readName();
+                case 2 -> phone = personInputReader.readPhone();
+                case 3 -> genderId = personInputReader.readGenderId();
+                case 4 -> address = personInputReader.readAddress();
+                case 5 -> bank = personInputReader.readBank();
+                case 6 -> accountNumber = personInputReader.readAccountNumber();
+                case 0 -> {
+                    System.out.print("등록을 취소했습니다.");
+                    return;
+                }
+                default -> System.out.println("올바른 번호를 선택해 주세요.");
             }
         }
     }

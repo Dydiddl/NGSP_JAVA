@@ -22,23 +22,10 @@ public class PersonConfig {
     public static final Set<Integer> VALID_GENDER_IDS =
             Set.of(MALE_GENDER_ID, FEMALE_GENDER_ID);
 
-    // bank
-    public static final Set<String> VALID_BANK_NAMES = Set.of(
-            "농협",
-            "국민",
-            "신한",
-            "우리",
-            "하나",
-            "기업",
-            "우체국",
-            "카카오",
-            "경남",
-            "토스"
-    );
-
     // bank account number
     public static final int ACCOUNT_NUMBER_MIN_LENGTH = 10;
     public static final int ACCOUNT_NUMBER_MAX_LENGTH = 30;
+
     public static final String PERSON_COLUMNS = """
             id,
             name,

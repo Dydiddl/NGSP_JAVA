@@ -1,6 +1,5 @@
 package database;
 
-
 import config.DatabaseConfig;
 
 import java.sql.Connection;
@@ -12,14 +11,12 @@ import java.sql.Statement;
 public final class DatabaseConnection {
     private DatabaseConnection() {
     }
-
     public static Connection getConnection()
             throws SQLException {
         Connection connection =
                 DriverManager.getConnection(
                         DatabaseConfig.JDBC_URL
                 );
-
         try {
             try (Statement statement =
                          connection.createStatement()) {
@@ -35,6 +32,4 @@ public final class DatabaseConnection {
             throw exception;
         }
     }
-
-
 }
