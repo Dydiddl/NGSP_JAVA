@@ -96,7 +96,7 @@ public class PersonInputReader {
         }
     }
 
-    public String readBank() {
+    public Bank readBank() {
         while (true) {
             System.out.print("은행: ");
             String input = scanner.nextLine().trim();

@@ -4,9 +4,9 @@ public record Person(
         long id,
         String name,
         String phone,
-        int gender_id,
+        Gender gender,
         String address,
-        String bank,
+        Bank bank,
         String account_number,
         PersonStatus status
 ) {

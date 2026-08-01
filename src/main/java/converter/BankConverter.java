@@ -1,28 +1,38 @@
 package converter;
 
 import model.Bank;
-import normalizer.PersonNormalizer;
+import normalizer.TextNormalizer;
 
 import java.util.Arrays;
 
+import static java.util.stream.StreamSupport.stream;
+
 public class BankConverter {
-    private BankConverter(){}
 
-    public static Bank from(String input){
-        String normalizedInput = PersonNormalizer.normalizeBank(input);
-
-        return Arrays.stream(Bank.values())
-        .filter(bank -> bank.getAliases().stream()
-            .map(PersonNormalizer::normalizeBank)
-            .anyMatch(normalizedInput::equals))
-        .findFirst()
-        .orElseThrow(()->
-            new IllegalArgumentException(
-                "지원하지 않는 은행입니다: "
-                + input
-            )
-        );
+    private BankConverter() {
     }
 
+    public static Bank toBank(String input) {
+        String normalizedInput = 
+        TextNormalizer.normalizeKeyword(input);
 
+        return Arrays.stream(Bank.values())
+        .filter(bank -> matches(bank, normalizedInput))
+        .findFirst()
+        .orElseThrow(() ->
+            new IllegalArgumentException(
+                "지원하지 않는 은행입니다: " + input
+            )
+        );
+
+    }
+
+    private static boolean matches(
+        Bank bank, 
+        String normalizedInput
+    ) {
+        return bank.getAliases().stream()
+        .map(TextNormalizer::normalizeKeyword)
+        .anyMatch(normalizedInput::equalsIgnoreCase);
+    }
 }

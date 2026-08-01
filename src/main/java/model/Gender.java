@@ -1,22 +1,34 @@
 package model;
 
-import java.util.Set;
-
 public enum Gender {
 
-    MALE("남성", Set.of("남", "남자", "M", "Male", "male")),
-    FEMALE("여성", Set.of("여", "여자", "여성", "F", "FEMAILE", "Female", "female"));
+    MALE(1, "남성"),
+    FEMALE(2, "여성");
 
+    private final int id;
     private final String displayName;
-    private final Set<String> aliases;
 
-    Gender(String displayName, Set<String> aliases) {
+    Gender(int id, String displayName) {
+        this.id = id;
         this.displayName = displayName;
-        this.aliases = aliases;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getDisplayName() {
         return displayName;
     }
-    public Set<String> getAliases(){return aliases;}
+
+
+    public static Gender fromId(int id) {
+        return switch (id) {
+            case 1 -> MALE;
+            case 2 -> FEMALE;
+            default -> throw new IllegalArgumentException(
+                "지원하지 않는 성별 번호입니다: " + id
+            );
+        };
+    }
 }
