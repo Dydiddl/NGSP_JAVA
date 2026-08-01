@@ -1,6 +1,7 @@
 package validator;
 
 import config.PersonConfig;
+import model.Bank;
 
 
 public class PersonValidator {
@@ -14,14 +15,14 @@ public class PersonValidator {
             String phone,
             int genderId,
             String address,
-            String bank,
+            Bank normalizedBank,
             String accountNumber
     ) {
         validateName(name);
         validatePhone(phone);
         validateGenderId(genderId);
         validateAddress(address);
-        validateBank(bank);
+        validateBank(normalizedBank);
         validateAccountNumber(accountNumber);
     }
 
@@ -80,13 +81,9 @@ public class PersonValidator {
         );
     }
 
-    public static void validateBank(String bank){
-        CommonValidator.requireText(bank, "은행 이름");
-        // 은행명은 추가되는 대로 config에 추가하자, 지금 당장에는 이렇게 관리하고, 추후 관리방법을 생각해보자.
-        if (!PersonConfig.VALID_BANK_NAMES.contains(bank)) {
-            throw new IllegalArgumentException(
-                    "지원하지 않는 은행입니다. 은행명을 다시 확인하세요"
-            );
+    public static void validateBank(Bank bank){
+        if (bank == null) {
+            throw new IllegalArgumentException("은행 정보는 필수입니다.");
         }
     }
 
