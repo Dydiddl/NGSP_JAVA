@@ -17,7 +17,7 @@ import ui.menu.MainMenu;
 import ui.menu.person.PersonSearchMenu;
 import ui.menu.person.PersonMenu;
 import ui.menu.person.PersonRegistrationMenu;
-import ui.menu.person.PersonUpdateMenu;
+import ui.menu.person.PersonjpdateMenu;
 
 public class Main {
 
@@ -72,7 +72,6 @@ public class Main {
                     personMenu
             );
             mainMenu.run();
-
         }
     }
 }
