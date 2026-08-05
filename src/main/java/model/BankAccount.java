@@ -2,7 +2,7 @@ package model;
 
 public record BankAccount(
     Bank bank,
-    String caaountNumber
+    String accountNumber
 
 ) {
     public BankAccount {
@@ -11,7 +11,7 @@ public record BankAccount(
         }
 
         if (accountNumber == null || accountNumber.isBlank()) {
-            throw new IllegalArgumentException("계좌번호는 필수입니다.")
+            throw new IllegalArgumentException("계좌번호는 필수입니다.");
         } 
     }
 }
