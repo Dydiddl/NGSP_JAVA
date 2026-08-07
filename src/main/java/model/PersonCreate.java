@@ -1,22 +1,10 @@
 package model;
 
 public record PersonCreate(
-        String name,
-        String phone,
-        int gender_id,
-        String address,
-        String bank,
-        String account_number
-) {
-    @Override
-    public String toString() {
-        return "PersonCreate{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", gender_id=" + gender_id +
-                ", address='" + address + '\'' +
-                ", bank='" + bank + '\'' +
-                ", account_number='" + account_number + '\'' +
-                '}';
-    }
-}
+    // 필수 입력 정보 : 이름, 주민등록번호, 폰번호,주소, 계좌번호(은행, 계좌번호)
+    String name,
+    ResidentRegistrationNumber residentRegistrationNumber,
+    String phone,
+    String address,
+    BankAccount bankAccount) {}
+
