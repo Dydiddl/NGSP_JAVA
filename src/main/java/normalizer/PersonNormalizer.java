@@ -24,4 +24,8 @@ public final class PersonNormalizer {
     public static String normalizeBank(String bank) {
         return TextNormalizer.removeAllWhitespace(bank);
     }
+
+    public static String normalizeResidentRegistrationNumber(String residentRegistrationNumber) {
+        return TextNormalizer.removeAllWhitespace(residentRegistrationNumber);
+    }
 }
