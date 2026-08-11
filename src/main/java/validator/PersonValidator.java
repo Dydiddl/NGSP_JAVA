@@ -11,7 +11,6 @@ public final class PersonValidator {
       String name, String phone, int genderId, String address, Bank bank, String accountNumber) {
     validateName(name);
     validatePhone(phone);
-    validateGenderId(genderId);
     validateAddress(address);
     validateBank(bank);
     validateAccountNumber(accountNumber);
@@ -33,13 +32,6 @@ public final class PersonValidator {
         phone, PersonConfig.PHONE_LENGTH, PersonConfig.PHONE_LENGTH, "휴대폰 번호");
     if (!phone.startsWith(PersonConfig.PHONE_PREFIX)) {
       throw new IllegalArgumentException("전화번호는" + PersonConfig.PHONE_PREFIX + "으로 시작해야 합니다.");
-    }
-  }
-
-  // TODO: Gender enum 도입 후 int genderId 검증 제거
-  public static void validateGenderId(int genderId) {
-    if (!PersonConfig.VALID_GENDER_IDS.contains(genderId)) {
-      throw new IllegalArgumentException("올바르지 않은 성별 코드입니다.");
     }
   }
 

@@ -15,10 +15,9 @@ package model;
 public record ResidentRegistrationNumber(String value) {
 
   public ResidentRegistrationNumber {
-    // TODO:
-    // birthDatePart()와 genderCode()가 안전하게 동작하도록
+    // TODO: birthDatePart()와 genderCode()가 안전하게 동작하도록
     // 주민등록번호의 길이와 형식에 대한 생성 시 검증 필요
-    if (value == null || value.isBlank()) {
+    if (value == null) {
       throw new IllegalArgumentException("주민등록번호는 필수입니다.");
     }
   }

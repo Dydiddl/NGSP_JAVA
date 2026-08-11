@@ -21,4 +21,3 @@ public record Person(
     String address,
     BankAccount bankAccount,
     PersonStatus status) {}
-
