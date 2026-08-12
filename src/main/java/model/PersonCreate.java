@@ -1,6 +1,8 @@
 package model;
 
+import converter.BankConverter;
 import normalizer.PersonNormalizer;
+import validator.PersonValidator;
 
 /**
  * 새로운 사람을 등록할 때 사용하는 입력 데이터를 표현한다.
@@ -20,20 +22,43 @@ public record PersonCreate(
     String phone,
     ResidentRegistrationNumber residentRegistrationNumber,
     String address,
-    BankAccount bankAccount,
-    Gender gender
+    BankAccount bankAccount
 ) {
-    public PersonCreate (
-            String name,
-            String phone,
-            ResidentRegistrationNumber residentRegistrationNumber,
-            String address,
-            BankAccount bankAccount
-    ) {
-        this(
-                PersonNormalizer.normalizeName(name),
+  public PersonCreate {
+    name = PersonNormalizer.normalizeName(name);
+    phone = PersonNormalizer.normalizePhone(phone);
+    address = PersonNormalizer.normalizeAddress(address);
 
-        );
+    PersonValidator.validateName(name);
+    PersonValidator.validatePhone(phone);
+    PersonValidator.validateAddress(address);
+
+    if (residentRegistrationNumber == null) {
+      throw new IllegalArgumentException("주민등록번호 정보는 필수입니다.");
     }
+
+    if (bankAccount == null) {
+      throw new IllegalArgumentException("계좌정보는 필수입니다.");
+    }
+  }
+
+  public PersonCreate(
+      String name,
+      String phone,
+      String residentRegistrationNumber,
+      String address,
+      String bank,
+      String accountNumber
+  ) {
+    this(
+        name,
+        phone,
+        new ResidentRegistrationNumber(
+            PersonNormalizer.normalizeResidentRegistrationNumber(residentRegistrationNumber)),
+        address,
+        new BankAccount(
+            BankConverter.toBank(PersonNormalizer.normalizeBank(bank)),
+            PersonNormalizer.normalizeAccountNumber(accountNumber))
+    );
+  }
 }
-// TODO: 검증을 도메인 모델에서 직접 하기로 결정
