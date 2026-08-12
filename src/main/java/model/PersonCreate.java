@@ -1,5 +1,7 @@
 package model;
 
+import normalizer.PersonNormalizer;
+
 /**
  * 새로운 사람을 등록할 때 사용하는 입력 데이터를 표현한다.
  *
@@ -15,8 +17,23 @@ package model;
  */
 public record PersonCreate(
     String name,
-    ResidentRegistrationNumber residentRegistrationNumber,
     String phone,
+    ResidentRegistrationNumber residentRegistrationNumber,
     String address,
-    BankAccount bankAccount) {}
+    BankAccount bankAccount,
+    Gender gender
+) {
+    public PersonCreate (
+            String name,
+            String phone,
+            ResidentRegistrationNumber residentRegistrationNumber,
+            String address,
+            BankAccount bankAccount
+    ) {
+        this(
+                PersonNormalizer.normalizeName(name),
+
+        );
+    }
+}
 // TODO: 검증을 도메인 모델에서 직접 하기로 결정
