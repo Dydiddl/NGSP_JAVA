@@ -5,8 +5,7 @@ package model;
  *
  * <p>데이터베이스에는 enum의 이름인 {@code MALE}, {@code FEMALE}을 저장한다.
  *
- * <p>주민등록번호의 성별코드는 데이터베이스에 저장하는 성별 값과 별개의 개념이며, {@link #fromResidentRegistrationCode(char)}를 통해 해당
- * 성별로 변환한다.
+ * <p>성별은 주민등록번호의 성별코드로부터 파생하며, {@link #fromResidentRegistrationCode(char)}를 통해 해당 성별로 변환한다.
  */
 public enum Gender {
   MALE("남성"),
