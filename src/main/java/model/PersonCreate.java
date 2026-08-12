@@ -19,4 +19,4 @@ public record PersonCreate(
     String phone,
     String address,
     BankAccount bankAccount) {}
-
+// TODO: 검증을 도메인 모델에서 직접 하기로 결정
