@@ -1,16 +1,23 @@
-# Basic impormation Person
+# Person의 최소 필수 정보
 
-모든 값들은 null일 수 없음
+- id
+  - 데이터베이스 내부 식별자
 
-- String name
-  - 중복 가능
-- ResidentRegistrationNumber residentRegistrationNumber
-  - 주민등록번호 앞자리 생년월일 및 성별 코드까지 저장
-  - '900430-1'
-- String phone
-  - 중복 불가
-- String address
-  - 중복 가능
-- BankAccount bankAccount
-  - bank name
-  - account number
+- displayName
+  - 실제 이름일 수도 있음
+  - 정확한 이름을 모르면 업무상 식별 가능한 표현도 허용
+  - 예: "김 주무관", "건설과 담당자"
+
+- contactNumbers
+  - 최소 1개 이상 필수
+  - MOBILE / OFFICE / HOME / OTHER 등 여러 종류 허용
+  - 한 사람이 여러 연락처를 가질 수 있음
+  - 필요 시 대표 연락처를 지정할 수 있음
+
+## 선택 정보
+- name
+  - 없어도 Person 생성 가능
+  - 실제 이름을 확인 가능한 경우가 생기는데 그것을 displayName에 적어놓으면 이름인지 별명인지 혼동이 올 수 있음
+- email
+  - 없어도 Person 생성 가능
+  - 업무상 확보되면 추가
