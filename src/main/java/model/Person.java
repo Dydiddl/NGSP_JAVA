@@ -1,23 +1,42 @@
 package model;
 
-/**
- * 데이터베이스에 저장된 사람 한 명을 표현하는 도메인 모델이다.
- *
- * <p>등록 전 입력값을 표현하는 {@link PersonCreate}와 달리, 데이터베이스에서 부여된 식별자와 현재 상태를 포함하는 완성된 사람 데이터를 표현한다.
- *
- * @param id 데이터베이스에서 부여된 사람의 고유 식별자
- * @param name 이름
- * @param residentRegistrationNumber 저장 가능한 범위로 가공된 주민등록번호 정보
- * @param phone 휴대폰 번호
- * @param address 주소
- * @param bankAccount 은행 및 계좌번호를 포함한 계좌정보
- * @param status 현재 사람의 관리 상태
- */
+import java.util.List;
+
+/** 데이터베이스에 저장된 업무상 관리 대상 한 명을 표현한다. */
 public record Person(
     long id,
+    String displayName,
+    List<ContactNumber> contactNumbers,
     String name,
-    ResidentRegistrationNumber residentRegistrationNumber,
-    String phone,
-    String address,
-    BankAccount bankAccount,
-    PersonStatus status) {}
+    String email,
+    PersonStatus status
+) {
+  public Person {
+    requireDisplayName(displayName);
+    contactNumbers = requireContactNumbers(contactNumbers);
+    requireOptionalValue(name, "실제 이름");
+    requireOptionalValue(email, "이메일");
+  }
+
+  private static void requireDisplayName(String displayName) {
+    if (displayName == null || displayName.isBlank()) {
+      throw new IllegalArgumentException("업무상 식별명은 필수입니다.");
+    }
+  }
+
+  private static List<ContactNumber> requireContactNumbers(List<ContactNumber> contactNumbers) {
+    if (contactNumbers == null || contactNumbers.isEmpty()) {
+      throw new IllegalArgumentException("연락처는 최소 1개 이상 필요합니다.");
+    }
+    if (contactNumbers.stream().anyMatch(contactNumber -> contactNumber == null)) {
+      throw new IllegalArgumentException("연락처에는 null을 포함할 수 없습니다.");
+    }
+    return List.copyOf(contactNumbers);
+  }
+
+  private static void requireOptionalValue(String value, String label) {
+    if (value != null && value.isBlank()) {
+      throw new IllegalArgumentException(label + "은(는) blank일 수 없습니다.");
+    }
+  }
+}
