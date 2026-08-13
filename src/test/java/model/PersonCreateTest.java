@@ -17,7 +17,6 @@ class PersonCreateTest {
   @Test
   void minimumInformationCreatesRegistrationModel() {
     PersonCreate person = new PersonCreate("건설과 담당자", List.of(CONTACT_NUMBER), null, null);
-
     assertEquals("건설과 담당자", person.displayName());
     assertEquals(List.of(CONTACT_NUMBER), person.contactNumbers());
     assertNull(person.name());
@@ -44,6 +43,28 @@ class PersonCreateTest {
   void nullContactNumberIsRejected() {
     assertThrows(IllegalArgumentException.class,
         () -> new PersonCreate("김 주무관", Arrays.asList(CONTACT_NUMBER, null), null, null));
+  }
+
+  @Test
+  void duplicateContactNumberObjectIsRejected() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new PersonCreate("김 주무관", List.of(CONTACT_NUMBER, CONTACT_NUMBER), null, null));
+  }
+
+  @Test
+  void numbersWithSameNormalizedValueAreRejected() {
+    ContactNumber formatted = new ContactNumber("010-1234-5678");
+    ContactNumber digitsOnly = new ContactNumber("01012345678");
+    assertThrows(IllegalArgumentException.class,
+        () -> new PersonCreate("김 주무관", List.of(formatted, digitsOnly), null, null));
+  }
+
+  @Test
+  void multipleDifferentContactNumbersAreAllowed() {
+    ContactNumber mobile = new ContactNumber("010-1234-5678");
+    PersonCreate person = new PersonCreate(
+        "김 주무관", List.of(CONTACT_NUMBER, mobile), null, null);
+    assertEquals(List.of(CONTACT_NUMBER, mobile), person.contactNumbers());
   }
 
   @ParameterizedTest

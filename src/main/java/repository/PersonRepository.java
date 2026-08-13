@@ -5,7 +5,6 @@ import model.PersonCreate;
 import model.Person;
 
 import database.DatabaseConnection;
-import model.PersonStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -102,7 +101,7 @@ public class PersonRepository {
             throw new IllegalArgumentException("검색할 이름을 입력하세요.");
         }
         String sql = """
-                SELECT id, name, phone, gender_id, address, bank, account_number,  status
+                SELECT id, name, phone, gender_id, address, bank, account_number
                 FROM person
                 WHERE name = ?
                 ORDER BY id
@@ -135,7 +134,7 @@ public class PersonRepository {
     // personId로 검색하기 때문에 항상 1명만 검색됨
     public Optional<Person> findById(int personId) {
         String sql = """
-                SELECT id, name, phone, gender_id, address, bank, account_number,  status
+                SELECT id, name, phone, gender_id, address, bank, account_number
                 FROM person
                 WHERE id = ?
                 """;
@@ -166,7 +165,7 @@ public class PersonRepository {
         }
 
         String sql = """
-                SELECT id, name, phone, gender_id, address, bank, account_number, status
+                SELECT id, name, phone, gender_id, address, bank, account_number
                 FROM person
                 WHERE gender_id = ?
                 ORDER BY id
@@ -243,27 +242,6 @@ public class PersonRepository {
                 accountNumber,
                 "사람 계좌번호 수정 중 오류가 발생했습니다."
         );
-    }
-
-    public boolean updateStatus(long personId, PersonStatus status) {
-        String sql = """
-                UPDATE person
-                SET status = ?
-                WHERE id = ?
-                """;
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, status.name());
-            statement.setLong(2, personId);
-            return statement.executeUpdate() == 1;
-        } catch (SQLException exception) {
-            throw new RuntimeException(
-                    "사람의 재직 상태를 변경하는 중 데이터베이스 오류가 발생했습니다.",
-                    exception
-            );
-        }
     }
 
     // int
@@ -349,8 +327,7 @@ public class PersonRepository {
                 resultSet.getInt("gender_id"),
                 resultSet.getString("address"),
                 resultSet.getString("bank"),
-                resultSet.getString("account_number"),
-                PersonStatus.valueOf(resultSet.getString("status"))
+                resultSet.getString("account_number")
         );
     }
 }

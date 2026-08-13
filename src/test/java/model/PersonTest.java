@@ -16,9 +16,7 @@ class PersonTest {
 
   @Test
   void minimumInformationCreatesPerson() {
-    Person person = new Person(1L, "건설과 담당자", List.of(CONTACT_NUMBER), null, null,
-        PersonStatus.ACTIVE);
-
+    Person person = new Person(1L, "건설과 담당자", List.of(CONTACT_NUMBER), null, null);
     assertEquals("건설과 담당자", person.displayName());
     assertEquals(List.of(CONTACT_NUMBER), person.contactNumbers());
     assertNull(person.name());
@@ -30,23 +28,42 @@ class PersonTest {
   @ValueSource(strings = {" ", "\t"})
   void nullOrBlankDisplayNameIsRejected(String displayName) {
     assertThrows(IllegalArgumentException.class,
-        () -> new Person(1L, displayName, List.of(CONTACT_NUMBER), null, null,
-            PersonStatus.ACTIVE));
+        () -> new Person(1L, displayName, List.of(CONTACT_NUMBER), null, null));
   }
 
   @Test
   void personWithoutContactNumberIsRejected() {
     assertThrows(IllegalArgumentException.class,
-        () -> new Person(1L, "김 주무관", List.of(), null, null, PersonStatus.ACTIVE));
+        () -> new Person(1L, "김 주무관", List.of(), null, null));
+  }
+
+  @Test
+  void duplicateContactNumberObjectIsRejected() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new Person(1L, "김 주무관", List.of(CONTACT_NUMBER, CONTACT_NUMBER), null, null));
+  }
+
+  @Test
+  void numbersWithSameNormalizedValueAreRejected() {
+    ContactNumber formatted = new ContactNumber("010-1234-5678");
+    ContactNumber digitsOnly = new ContactNumber("01012345678");
+    assertThrows(IllegalArgumentException.class,
+        () -> new Person(1L, "김 주무관", List.of(formatted, digitsOnly), null, null));
+  }
+
+  @Test
+  void multipleDifferentContactNumbersAreAllowed() {
+    ContactNumber landline = new ContactNumber("055-123-4567");
+    Person person = new Person(1L, "김 주무관", List.of(CONTACT_NUMBER, landline), null, null);
+    assertEquals(List.of(CONTACT_NUMBER, landline), person.contactNumbers());
   }
 
   @Test
   void contactNumbersAreDefensivelyCopied() {
     List<ContactNumber> contacts = new ArrayList<>();
     contacts.add(CONTACT_NUMBER);
-    Person person = new Person(1L, "김 주무관", contacts, null, null, PersonStatus.ACTIVE);
+    Person person = new Person(1L, "김 주무관", contacts, null, null);
     contacts.clear();
-
     assertEquals(List.of(CONTACT_NUMBER), person.contactNumbers());
     assertThrows(UnsupportedOperationException.class, () -> person.contactNumbers().clear());
   }
@@ -55,10 +72,8 @@ class PersonTest {
   @ValueSource(strings = {"", " ", "\t"})
   void blankOptionalInformationIsRejected(String blank) {
     assertThrows(IllegalArgumentException.class,
-        () -> new Person(1L, "김 주무관", List.of(CONTACT_NUMBER), blank, null,
-            PersonStatus.ACTIVE));
+        () -> new Person(1L, "김 주무관", List.of(CONTACT_NUMBER), blank, null));
     assertThrows(IllegalArgumentException.class,
-        () -> new Person(1L, "김 주무관", List.of(CONTACT_NUMBER), null, blank,
-            PersonStatus.ACTIVE));
+        () -> new Person(1L, "김 주무관", List.of(CONTACT_NUMBER), null, blank));
   }
 }

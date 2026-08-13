@@ -33,8 +33,7 @@ public class PersonConfig {
             gender_id,
             address,
             bank,
-            account_number,
-            status
+            account_number
             """;
     public static final String SELECT_ALL_SQL =
             "SELECT " + PERSON_COLUMNS + """

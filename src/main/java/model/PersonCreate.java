@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.List;
 
 /** 새로운 Person을 등록할 때 사용하는 최소 도메인 모델이다. */
@@ -28,6 +29,9 @@ public record PersonCreate(
     }
     if (contactNumbers.stream().anyMatch(contactNumber -> contactNumber == null)) {
       throw new IllegalArgumentException("연락처에는 null을 포함할 수 없습니다.");
+    }
+    if (new HashSet<>(contactNumbers).size() != contactNumbers.size()) {
+      throw new IllegalArgumentException("동일한 연락처를 중복해서 등록할 수 없습니다.");
     }
     return List.copyOf(contactNumbers);
   }

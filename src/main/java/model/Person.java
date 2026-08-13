@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.List;
 
 /** 데이터베이스에 저장된 업무상 관리 대상 한 명을 표현한다. */
@@ -8,8 +9,7 @@ public record Person(
     String displayName,
     List<ContactNumber> contactNumbers,
     String name,
-    String email,
-    PersonStatus status
+    String email
 ) {
   public Person {
     requireDisplayName(displayName);
@@ -30,6 +30,9 @@ public record Person(
     }
     if (contactNumbers.stream().anyMatch(contactNumber -> contactNumber == null)) {
       throw new IllegalArgumentException("연락처에는 null을 포함할 수 없습니다.");
+    }
+    if (new HashSet<>(contactNumbers).size() != contactNumbers.size()) {
+      throw new IllegalArgumentException("동일한 연락처를 중복해서 등록할 수 없습니다.");
     }
     return List.copyOf(contactNumbers);
   }

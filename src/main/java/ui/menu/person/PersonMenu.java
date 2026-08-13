@@ -13,7 +13,6 @@ public class PersonMenu {
     private final PersonRegistrationMenu personRegistrationMenu;
     private final PersonSearchMenu personSearchMenu;
     private final PersonUpdateMenu personUpdateMenu;
-    private final PersonStatusMenu personStatusMenu;
 
     public PersonMenu(
             MenuInputReader menuInputReader,
@@ -21,8 +20,7 @@ public class PersonMenu {
             PersonOutput personOutput,
             PersonRegistrationMenu personRegistrationMenu,
             PersonSearchMenu personSearchMenu,
-            PersonUpdateMenu personUpdateMenu,
-            PersonStatusMenu personStatusMenu
+            PersonUpdateMenu personUpdateMenu
     ) {
         this.menuInputReader = menuInputReader;
         this.personSearchService = personSearchService;
@@ -30,7 +28,6 @@ public class PersonMenu {
         this.personRegistrationMenu = personRegistrationMenu;
         this.personSearchMenu = personSearchMenu;
         this.personUpdateMenu = personUpdateMenu;
-        this.personStatusMenu = personStatusMenu;
     }
 
     public void run() {
@@ -53,10 +50,6 @@ public class PersonMenu {
                 case 3:
                     // 사람 정보 수정
                     personUpdateMenu.run();
-                    break;
-                case 4:
-                    // 재직상태 변경 메뉴
-                    personStatusMenu.run();
                     break;
                 case 0:
                     // 메인 메뉴로 돌아가기
@@ -88,7 +81,6 @@ public class PersonMenu {
         System.out.println("1. 사람 등록");
         System.out.println("2. 사람 검색");
         System.out.println("3. 사람 정보 수정");
-        System.out.println("4. 재직 상태 변경");
         System.out.println("0. 메인 메뉴로 돌아가기");
         System.out.println(UiConfig.DIVIDER);
     }
