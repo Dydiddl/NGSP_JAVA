@@ -69,9 +69,17 @@ class PersonRepositoryTest {
 
   @Test
   void allowsSameLandlineAcrossPersons() {
-    repository.save(person("전 담당자", "02-123-4567"));
-    repository.save(person("현 담당자", "021234567"));
-    assertEquals(2, repository.findAll().size());
+    assertSharedAcrossPersons("02-123-4567", "021234567");
+  }
+
+  @Test
+  void allowsSameInternetPhoneAcrossPersons() {
+    assertSharedAcrossPersons("070-1234-5678", "07012345678");
+  }
+
+  @Test
+  void allowsSamePersonalNumberServiceAcrossPersons() {
+    assertSharedAcrossPersons("050-1234-5678", "05012345678");
   }
 
   @Test
@@ -82,6 +90,12 @@ class PersonRepositoryTest {
       assertThrows(SQLException.class,
           () -> insertContact(connection, personId, "01012345678", "MOBILE"));
     }
+  }
+
+  private void assertSharedAcrossPersons(String firstExpression, String secondExpression) {
+    repository.save(person("첫 담당자", firstExpression));
+    repository.save(person("두 번째 담당자", secondExpression));
+    assertEquals(2, repository.findAll().size());
   }
 
   private PersonCreate person(String displayName, String number) {

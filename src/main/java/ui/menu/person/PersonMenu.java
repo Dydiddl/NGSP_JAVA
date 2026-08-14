@@ -12,9 +12,13 @@ public class PersonMenu {
   private final PersonRegistrationMenu registrationMenu;
   private final PersonSearchMenu searchMenu;
 
-  public PersonMenu(MenuInputReader menuInputReader, PersonSearchService searchService,
-      PersonOutput personOutput, PersonRegistrationMenu registrationMenu,
-      PersonSearchMenu searchMenu) {
+  public PersonMenu(
+          MenuInputReader menuInputReader,
+          PersonSearchService searchService,
+          PersonOutput personOutput,
+          PersonRegistrationMenu registrationMenu,
+          PersonSearchMenu searchMenu
+  ) {
     this.menuInputReader = menuInputReader;
     this.searchService = searchService;
     this.personOutput = personOutput;

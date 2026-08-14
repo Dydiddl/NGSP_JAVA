@@ -25,8 +25,9 @@ ContactNumber는 입력 표현을 숫자만 남긴 번호로 정규화하고, �
 
 ## Person 간 중복 정책
 
-- `MOBILE`: 서로 다른 Person이 동시에 같은 번호를 가질 수 없다.
-- `LANDLINE`: 관공서 부서 번호처럼 서로 다른 Person이 같은 번호를 가질 수 있다.
-- `INTERNET_PHONE`, `PERSONAL_NUMBER_SERVICE`: 아직 확정하지 않았다.
+- `MOBILE`은 개인 휴대전화로 취급하여 서로 다른 Person이 동시에 같은 번호를 가질 수 없다.
+- `LANDLINE`, `INTERNET_PHONE`, `PERSONAL_NUMBER_SERVICE`는 여러 Person이 공유할 수 있는 업무 연락처로 취급한다.
+
+이 정책은 현실의 모든 전화번호 사용 사례를 일반화한 규칙이 아니라 현재 NGSP의 업무 기준이다. 실제 업무에서 담당자 승계나 다른 사용 사례로 문제가 확인되면 재검토한다.
 
 저장 구조와 DB 제약은 `docs/database/person-contact-number.md`에서 설명한다.
