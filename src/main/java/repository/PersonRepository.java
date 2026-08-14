@@ -1,333 +1,145 @@
 package repository;
 
-import config.PersonConfig;
-import model.PersonCreate;
-import model.Person;
-
 import database.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import model.ContactNumber;
+import model.Person;
+import model.PersonCreate;
 
 public class PersonRepository {
-
-    public PersonRepository() {
+  public long save(PersonCreate person) {
+    if (person == null) {
+      throw new IllegalArgumentException("저장할 사람 정보가 없습니다.");
     }
-
-    // Save
-    public long save(PersonCreate person) {
-        if (person == null) {
-            throw new IllegalArgumentException("저장할 사람 정보가 없습니다.");
-        }
-        String sql = """
-                INSERT INTO person (
-                    name,
-                    phone,
-                    gender_id,
-                    address,
-                    bank,
-                    account_number
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-                """;
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(
-                        sql,
-                        Statement.RETURN_GENERATED_KEYS
-                )
-
-        ) {
-            statement.setString(1, person.name());
-            statement.setString(2, person.phone());
-            statement.setInt(3, person.gender_id());
-            statement.setString(4, person.address());
-            statement.setString(5, person.bank());
-            statement.setString(6, person.account_number());
-
-            int affectedRows = statement.executeUpdate();
-
-            if (affectedRows != 1) {
-                throw new IllegalStateException("사람 등록에 실패했습니다.");
-            }
-
-            try (
-                    ResultSet generatedKeys = statement.getGeneratedKeys()
-            ) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getLong(1);
-                }
-            }
-
-            throw new IllegalStateException("생성된 사람 ID를 가져오지 못했습니다.");
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("사람 저장 중 데이터베이스 오류가 발생했습니다.", exception);
-        }
+    try (Connection connection = DatabaseConnection.getConnection()) {
+      connection.setAutoCommit(false);
+      try {
+        long personId = insertPerson(connection, person);
+        insertContactNumbers(connection, personId, person.contactNumbers());
+        connection.commit();
+        return personId;
+      } catch (SQLException | RuntimeException exception) {
+        rollback(connection, exception);
+        throw exception;
+      }
+    } catch (SQLException exception) {
+      throw new RuntimeException("사람 저장 중 데이터베이스 오류가 발생했습니다.", exception);
     }
+  }
 
+  public List<Person> findAll() {
+    return findPeople("SELECT id, display_name, name, email FROM person ORDER BY id", null);
+  }
 
-    // 저장된 모든 사람 목록
-    public List<Person> findAll() {
-        String sql = PersonConfig.SELECT_ALL_SQL;
+  public List<Person> findByName(String name) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("검색할 이름을 입력하세요.");
+    }
+    return findPeople("""
+        SELECT id, display_name, name, email
+        FROM person
+        WHERE name = ?
+        ORDER BY id
+        """, name);
+  }
 
+  public Optional<Person> findById(long personId) {
+    String sql = "SELECT id, display_name, name, email FROM person WHERE id = ?";
+    try (Connection connection = DatabaseConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setLong(1, personId);
+      try (ResultSet resultSet = statement.executeQuery()) {
+        return resultSet.next() ? Optional.of(mapToPerson(connection, resultSet)) : Optional.empty();
+      }
+    } catch (SQLException exception) {
+      throw new RuntimeException("ID로 사람을 조회하는 중 데이터베이스 오류가 발생했습니다.", exception);
+    }
+  }
+
+  private List<Person> findPeople(String sql, String name) {
+    try (Connection connection = DatabaseConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+      if (name != null) {
+        statement.setString(1, name);
+      }
+      try (ResultSet resultSet = statement.executeQuery()) {
         List<Person> persons = new ArrayList<>();
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            while (resultSet.next()) {
-                persons.add(mapToPerson(resultSet));
-            }
-            return persons;
-        } catch (SQLException exception) {
-            throw new RuntimeException("전체 사람 목록을 조회하는 중 데이터베이스 오류가 발생했습니다", exception);
+        while (resultSet.next()) {
+          persons.add(mapToPerson(connection, resultSet));
         }
+        return persons;
+      }
+    } catch (SQLException exception) {
+      throw new RuntimeException("사람 목록 조회 중 데이터베이스 오류가 발생했습니다.", exception);
     }
+  }
 
-
-    // Search by name, 이름으로 검색(동명이인등이 함께 검색됨)
-    public List<Person> findByName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("검색할 이름을 입력하세요.");
+  private long insertPerson(Connection connection, PersonCreate person) throws SQLException {
+    String sql = "INSERT INTO person (display_name, name, email) VALUES (?, ?, ?)";
+    try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+      statement.setString(1, person.displayName());
+      statement.setString(2, person.name());
+      statement.setString(3, person.email());
+      if (statement.executeUpdate() != 1) {
+        throw new IllegalStateException("사람 등록에 실패했습니다.");
+      }
+      try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          return generatedKeys.getLong(1);
         }
-        String sql = """
-                SELECT id, name, phone, gender_id, address, bank, account_number
-                FROM person
-                WHERE name = ?
-                ORDER BY id
-                """;
-        List<Person> persons = new ArrayList<>();
+      }
+      throw new IllegalStateException("생성된 사람 ID를 가져오지 못했습니다.");
+    }
+  }
 
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, name);
+  private void insertContactNumbers(Connection connection, long personId,
+      List<ContactNumber> contactNumbers) throws SQLException {
+    String sql = "INSERT INTO person_contact_number (person_id, number, type) VALUES (?, ?, ?)";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+      for (ContactNumber contactNumber : contactNumbers) {
+        statement.setLong(1, personId);
+        statement.setString(2, contactNumber.number());
+        statement.setString(3, contactNumber.type().name());
+        statement.addBatch();
+      }
+      statement.executeBatch();
+    }
+  }
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    persons.add(mapToPerson(resultSet));
-                }
-            }
-            return persons;
+  private Person mapToPerson(Connection connection, ResultSet personRow) throws SQLException {
+    long id = personRow.getLong("id");
+    return new Person(id, personRow.getString("display_name"),
+        findContactNumbers(connection, id), personRow.getString("name"),
+        personRow.getString("email"));
+  }
 
-        } catch (SQLException exception) {
-            throw new RuntimeException(
-                    "이름으로 사람을 검색하는 중 데이터베이스 오류가 발생했습니다.",
-                    exception
-            );
+  private List<ContactNumber> findContactNumbers(Connection connection, long personId)
+      throws SQLException {
+    String sql = "SELECT number FROM person_contact_number WHERE person_id = ? ORDER BY id";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setLong(1, personId);
+      try (ResultSet resultSet = statement.executeQuery()) {
+        List<ContactNumber> contactNumbers = new ArrayList<>();
+        while (resultSet.next()) {
+          contactNumbers.add(new ContactNumber(resultSet.getString("number")));
         }
-
+        return contactNumbers;
+      }
     }
+  }
 
-
-    // personId로 검색하기 때문에 항상 1명만 검색됨
-    public Optional<Person> findById(int personId) {
-        String sql = """
-                SELECT id, name, phone, gender_id, address, bank, account_number
-                FROM person
-                WHERE id = ?
-                """;
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setInt(1, personId);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(mapToPerson(resultSet));
-                }
-
-                return Optional.empty();
-            }
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("ID로 사람을 조회하는 중 데이터베이스 오류가 발생했습니다.", exception);
-        }
+  private void rollback(Connection connection, Exception cause) {
+    try {
+      connection.rollback();
+    } catch (SQLException rollbackFailure) {
+      cause.addSuppressed(rollbackFailure);
     }
-
-
-    // Search by gender
-    public List<Person> findByGenderId(int genderId) {
-        if (genderId != 1 && genderId != 2) {
-            throw new IllegalArgumentException("올바른 성별 번호를 입력하세요.");
-        }
-
-        String sql = """
-                SELECT id, name, phone, gender_id, address, bank, account_number
-                FROM person
-                WHERE gender_id = ?
-                ORDER BY id
-                """;
-        List<Person> persons = new ArrayList<>();
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setInt(1, genderId);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    persons.add(mapToPerson(resultSet));
-                }
-            }
-            return persons;
-
-        } catch (SQLException exception) {
-            throw new RuntimeException(
-                    "성별로 사람을 검색하는 중 데이터베이스 오류가 발생했습니다.",
-                    exception
-            );
-        }
-
-    }
-
-
-    // Update
-    // String
-    public int updateName(int personId, String name) {
-        return updateStringField(
-                personId,
-                "name",
-                name,
-                "사람 이름 수정 중 오류가 발생했습니다."
-        );
-    }
-
-    public int updatePhone(int personId, String phone) {
-        return updateStringField(
-                personId,
-                "phone",
-                phone,
-                "사람 전화번호 수정 중 오류가 발생했습니다."
-        );
-
-    }
-
-    public int updateAddress(int personId, String address) {
-
-        return updateStringField(
-                personId,
-                "address",
-                address,
-                "사람 주소 수정 중 오류가 발생했습니다."
-        );
-    }
-
-    public int updateBank(int personId, String bank) {
-        return updateStringField(
-                personId,
-                "bank",
-                bank,
-                "사람 은행 수정 중 오류가 발생했습니다."
-        );
-    }
-
-    public int updateAccountNumber(int personId, String accountNumber) {
-        return updateStringField(
-                personId,
-                "account_number",
-                accountNumber,
-                "사람 계좌번호 수정 중 오류가 발생했습니다."
-        );
-    }
-
-    // int
-    public int updateGenderId(int personId, int genderId) {
-        String sql = """
-                UPDATE person
-                SET gender_id = ?
-                WHERE id = ?
-                """;
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setInt(1, genderId);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-
-        } catch (SQLException exception) {
-            throw new RuntimeException("사람 성별 수정 중 오류가 발생했습니다.", exception);
-        }
-    }
-
-    // 2종류 혼합
-    public int updateBankAccount(
-            int personId,
-            String bank,
-            String accountNumber
-    ) {
-        String sql = """
-                UPDATE person
-                SET bank = ?, account_number = ?
-                WHERE id = ?
-                """;
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, bank);
-            statement.setString(2, accountNumber);
-            statement.setInt(3, personId);
-
-            return statement.executeUpdate();
-        } catch (SQLException exception) {
-            throw new RuntimeException("통장 정보 수정 중 오류가 발생했습니다.", exception);
-        }
-    }
-
-    // 공통 필드 String ver
-    private int updateStringField(
-            int personId,
-            String columnName,
-            String value,
-            String errorMessage) {
-        String sql = """
-                UPDATE person
-                SET %s = ?
-                WHERE id = ?
-                """.formatted(columnName);
-
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, value);
-            statement.setInt(2, personId);
-
-            return statement.executeUpdate();
-        } catch (SQLException exception) {
-            throw new RuntimeException(errorMessage, exception);
-        }
-    }
-
-
-    // mapToPerson 중복코드
-    private Person mapToPerson(ResultSet resultSet) throws SQLException {
-        return new Person(
-                resultSet.getLong("id"),
-                resultSet.getString("name"),
-                resultSet.getString("phone"),
-                resultSet.getInt("gender_id"),
-                resultSet.getString("address"),
-                resultSet.getString("bank"),
-                resultSet.getString("account_number")
-        );
-    }
+  }
 }

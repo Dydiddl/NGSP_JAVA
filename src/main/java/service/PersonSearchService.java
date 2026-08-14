@@ -1,30 +1,21 @@
 package service;
 
+import java.util.List;
 import model.Person;
 import repository.PersonRepository;
 
-import java.util.List;
-
 public class PersonSearchService {
+  private final PersonRepository personRepository;
 
-    private final PersonRepository personRepository;
+  public PersonSearchService(PersonRepository personRepository) {
+    this.personRepository = personRepository;
+  }
 
-    public PersonSearchService(PersonRepository personRepository)
-    {this.personRepository = personRepository;}
+  public List<Person> findAll() {
+    return personRepository.findAll();
+  }
 
-    public List<Person> findAll()
-    {
-        return personRepository.findAll();
-    }
-
-    public List<Person> findByName(String name)
-    {
-        return personRepository.findByName(name);
-    }
-
-    public List<Person> findByGenderId(int genderId)
-    {
-        return personRepository.findByGenderId(genderId);
-    }
-
+  public List<Person> findByName(String name) {
+    return personRepository.findByName(name);
+  }
 }

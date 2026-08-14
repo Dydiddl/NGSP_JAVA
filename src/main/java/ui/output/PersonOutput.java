@@ -1,95 +1,55 @@
 package ui.output;
 
-import config.UiConfig;
-
+import java.util.List;
+import java.util.stream.Collectors;
+import model.ContactNumber;
 import model.Person;
 import model.PersonCreate;
 
-import formatter.PersonFormatter;
-
-import java.util.List;
-
 public class PersonOutput {
-
-    public void printPersons(List<Person> persons) {
-        System.out.println();
-
-        if(persons.isEmpty()) {
-            System.out.println("검색 결과가 없습니다.");
-            return;
-        }
-
-        UiOutput.printHeader("검색 결과");
-
-        for (Person person : persons) {
-            printPerson(person);
-        }
+  public void printPersons(List<Person> persons) {
+    if (persons.isEmpty()) {
+      System.out.println("검색 결과가 없습니다.");
+      return;
     }
+    UiOutput.printHeader("검색 결과");
+    persons.forEach(this::printPerson);
+  }
 
-    public void printPersonsTable(List<Person> persons) {
-        System.out.println();
-
-        if(persons.isEmpty()) {
-            System.out.println("등록된 사람이 없습니다.");
-            return;
-        }
-
-        UiOutput.printHeader("전체 사람 목록");
-
-        UiOutput.printTableDivider();
-
-        System.out.printf(UiConfig.PERSON_TABLE_FORMAT,
-                "ID",
-                "이름",
-                "성별",
-                "전화번호",
-                "은행",
-                "계좌번호",
-                "주소"
-        );
-
-        UiOutput.printTableRowDivider();
-
-        for  (Person person : persons) {
-            System.out.printf(
-                    UiConfig.PERSON_TABLE_FORMAT,
-                    person.id(),
-                    person.name(),
-                    PersonFormatter.formatGender(person.gender_id()),
-                    PersonFormatter.formatPhone(person.phone()),
-                    person.bank(),
-                    person.account_number(),
-                    person.address()
-            );
-        }
-
-        UiOutput.printTableDivider();
-
+  public void printPersonsTable(List<Person> persons) {
+    if (persons.isEmpty()) {
+      System.out.println("등록된 사람이 없습니다.");
+      return;
     }
+    UiOutput.printHeader("전체 사람 목록");
+    persons.forEach(this::printPerson);
+  }
 
-    public void printPersonCreate(PersonCreate person){
-        UiOutput.printHeader("등록 결과");
-        System.out.println("이름: " + person.name());
-        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.phone()));
-        System.out.println("성별:  " + PersonFormatter.formatGender(person.gender_id()));
-        System.out.println("주소: " + person.address());
-        System.out.println("은행: " + person.bank());
-        System.out.println("계좌번호: " + person.account_number());
-        UiOutput.printDivider();
-    }
+  public void printPersonCreate(PersonCreate person) {
+    UiOutput.printHeader("등록 정보");
+    System.out.println("업무상 식별명: " + person.displayName());
+    System.out.println("연락처: " + formatContacts(person.contactNumbers()));
+    System.out.println("실제 이름: " + optional(person.name()));
+    System.out.println("이메일: " + optional(person.email()));
+    UiOutput.printDivider();
+  }
 
+  private void printPerson(Person person) {
+    System.out.println("ID: " + person.id());
+    System.out.println("업무상 식별명: " + person.displayName());
+    System.out.println("연락처: " + formatContacts(person.contactNumbers()));
+    System.out.println("실제 이름: " + optional(person.name()));
+    System.out.println("이메일: " + optional(person.email()));
+    UiOutput.printDivider();
+  }
 
-    private void printPerson(Person person) {
-        System.out.println("ID: " + person.id());
-        System.out.println("이름: " + person.name());
-        System.out.println("성별: " + PersonFormatter.formatGender(person.gender_id()));
-        System.out.println("전화번호: " + PersonFormatter.formatPhone(person.phone()));
-        System.out.println("주소: " + person.address());
-        System.out.println("은행: " + person.bank());
-        System.out.println("계좌번호: " + person.account_number());
-        UiOutput.printDivider();
-    }
+  private String formatContacts(List<ContactNumber> contacts) {
+    return contacts.stream()
+        .map(contact -> contact.number() + " (" + contact.type().displayName() + ")")
+        .collect(Collectors.joining(", "));
+  }
 
-
-
+  private String optional(String value) {
+    return value == null ? "-" : value;
+  }
 }
